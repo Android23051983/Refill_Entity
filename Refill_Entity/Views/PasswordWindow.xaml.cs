@@ -43,6 +43,7 @@ namespace Refill_Entity
                 {
                     nameBox.Items.Add(user.Name);
                 }
+                nameBox.SelectedIndex = 0;
             }
              
         }
@@ -59,6 +60,7 @@ namespace Refill_Entity
                         userName = user.Name;
                         this.Owner.Title = $"Заправочный комплекс Лукойл (работает кассир: {user.Name})";
                         this.DialogResult = true;
+                        nameBox.SelectedIndex = 0;
                     }
                 }
                 if (valueStatus == -1)

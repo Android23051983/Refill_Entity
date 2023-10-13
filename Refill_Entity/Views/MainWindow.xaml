@@ -8,6 +8,7 @@
         Title="Заправочный комплекс Лукойл" MinHeight="1080" MinWidth="1920"
         WindowStyle="None"
         WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize" Icon="/Luk.png">
 
     <Window.Resources>
@@ -253,6 +254,17 @@
 
             </Grid>
         </GroupBox>
+        
+        <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА ЗАПРАВКА" FontSize="20" FontWeight="Bold" Height="50" Width="200"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА КАФЕ" FontSize="20" FontWeight="Bold" Height="50" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CafePaymentBtn_Click"/>
+        </StackPanel>
+        
+        
+        
         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
             <Label Content="Итого за бензин" />
 

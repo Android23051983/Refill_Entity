@@ -11,6 +11,7 @@ public partial class Sale : Notify
     private double quantity;
     private string? nameUsers;
     private DateTime date;
+    private TimeSpan time;
     public string ProductName
     {
         get => productName!;
@@ -44,5 +45,11 @@ public partial class Sale : Notify
         get => date;
         set
         { date = value; OnPropertyChanged("date"); }
+    }
+
+    public TimeSpan Time
+    {
+        get { return time; }
+        set { time = value; OnPropertyChanged("Time"); }
     }
 }

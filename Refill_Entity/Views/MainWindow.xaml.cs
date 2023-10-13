@@ -21,6 +21,8 @@ namespace Refill_Entity
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private Sale Sale;
         public MainWindowViewModel ViewModel {  get; set; }
         
         public MainWindow()
@@ -31,6 +33,22 @@ namespace Refill_Entity
             Loaded += MainWindow_Loaded;
         }
 
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // создание, подключение и вывод нового окна авторизации после загрузки MainWindow
+            PasswordWindow passwordWindow = new()
+            {
+                Owner = this
+            };
+            passwordWindow.ShowDialog();
+            titleLabel.Content = this.Title;
+            MainWindowViewModel.PetrolLoaded();
+            foreach (var petrol in MainWindowViewModel.petrolTitle)
+            {
+                petrolBox.Items.Add(petrol);
+            }
+            petrolBox.SelectedIndex = 0;
+        }
 
         private void ServiceBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -53,23 +71,6 @@ namespace Refill_Entity
                 passwordWindow.ShowDialog();
                 titleLabel.Content = this.Title;
             }
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            // создание, подключение и вывод нового окна авторизации после загрузки MainWindow
-            PasswordWindow passwordWindow = new()
-            {
-                Owner = this
-            };
-            passwordWindow.ShowDialog();
-            titleLabel.Content = this.Title;
-            MainWindowViewModel.PetrolLoaded();
-            foreach (var petrol in MainWindowViewModel.petrolTitle)
-            {
-                petrolBox.Items.Add(petrol);
-            }
-            petrolBox.SelectedIndex = 0;
         }
 
             private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -199,7 +200,7 @@ namespace Refill_Entity
         private void menuDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Product? product = menuDataGrid.SelectedItem as Product;
-            Sale Sale = new() { ProductName = product.Title, Amount = product.Price, Quantity = 0, NameUsers = PasswordWindow.userName, Date = DateTime.Now };
+            Sale = new() { ProductName = product!.Title, Amount = product.Price, Quantity = 0, NameUsers = PasswordWindow.userName!, Date = DateTime.Now };
 
             MainWindowViewModel.saleproductsObserv = new ObservableCollection<Sale>();
             MainWindowViewModel.saleproductsObserv.Add(Sale);
@@ -225,12 +226,33 @@ namespace Refill_Entity
         {
             if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
             {
-                var index = saleDataGrid.SelectedIndex;
-                saleDataGrid.Items.RemoveAt(index);
+                try
+                {
+                    var index = saleDataGrid.SelectedIndex;
+                    saleDataGrid.Items.RemoveAt(index);
+                }
+                catch 
+                {
+                    MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                
             }
             else if (PasswordWindow.valueStatus == 0)
             {
                 MessageBox.Show("Товар может отменять только Старший Кассир или Администратор", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void CafePaymentBtn_Click(object sender, RoutedEventArgs e)
+        {
+            using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
+            {
+                db.Sales.Add(Sale);
+                db.SaveChanges();
+                foreach (Sale sale in db.Sales)
+                {
+                    MessageBox.Show($"Название товара {sale.ProductName}, стоимость товара {sale.Amount}, кол-во товара {sale.Quantity}, продавец {sale.NameUsers}, ");
+                }
             }
         }
     }
