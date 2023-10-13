@@ -1,0 +1,314 @@
+﻿<Window x:Class="Refill_Entity.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Refill_Entity" xmlns:viewmodels="clr-namespace:Refill_Entity.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="Заправочный комплекс Лукойл" MinHeight="1080" MinWidth="1920"
+        WindowStyle="None"
+        WindowState="Maximized"
+        ResizeMode="NoResize" Icon="/Luk.png">
+
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="MyButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                <Setter Property="BorderThickness" Value="10"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <!--<Setter Property="Background" TargetName="border" Value="Gray"/>-->
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="LightGray"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <RoutedUICommand x:Key="cmd1"></RoutedUICommand>
+        <RoutedUICommand x:Key="cmd2"></RoutedUICommand>
+        <RoutedUICommand x:Key="cmd3"></RoutedUICommand>
+        <RoutedUICommand x:Key="cmd4"></RoutedUICommand>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FlowDirection" Value="RightToLeft"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource cmd1}" Executed="ServiceBtn_Click"></CommandBinding>                            
+        <CommandBinding Command="{StaticResource cmd2}" Executed="CancelBtn_Click"></CommandBinding>
+        <CommandBinding Command="{StaticResource cmd3}" Executed="CashierBtn_Click"></CommandBinding>
+        <CommandBinding Command="{StaticResource cmd4}" Executed="ClosePSBtn_Click"></CommandBinding>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="F10" Command="{StaticResource cmd1}"></KeyBinding>
+        <KeyBinding Key="F9" Command="{StaticResource cmd2}"></KeyBinding>
+        <KeyBinding Key="F2" Command="{StaticResource cmd3}"></KeyBinding>
+        <KeyBinding Key="F12" Command="{StaticResource cmd4}"></KeyBinding>
+    </Window.InputBindings>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush Opacity="0.3" Stretch="UniformToFill" ImageSource="/Заправка.jpg"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.1*"/>
+        </Grid.RowDefinitions>
+
+
+        <GroupBox Header="Автозаправка" Grid.Row="0" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="5" FontSize="30" FontWeight="Bold">
+
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.15*"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column1Btn_Click">
+                        <Image Source="/Refill1.png" />
+                    </Button>
+
+                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column2Btn_Click">
+                        <Image Source="/Refill2.png" />
+                    </Button>
+
+                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column3Btn_Click">
+                        <Image Source="/Refill3.png" />
+                    </Button>
+
+                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column4Btn_Click">
+                        <Image Source="/Refill4.png" />
+                    </Button>
+
+                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column5Btn_Click">
+                        <Image Source="/Refill5.png" />
+                    </Button>
+
+                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column6Btn_Click">
+                        <Image Source="/Refill6.png" />
+                    </Button>
+
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <Label x:Name="columnNumber" Content="Колонка номер 1" FontSize="30" FontWeight="SemiBold" Margin="0,5,0,5"/>
+                    <Label Content="Заправляется Топливо марки" FontSize="30" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="petrolBox" Width="255" Height="30" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="18" FontWeight="SemiBold" Background="FloralWhite" SelectionChanged="petrolBox_SelectionChanged"/>
+                    <Label Content="Цена топлива" FontSize="30" FontWeight="SemiBold" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+
+                        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Width="100" HorizontalAlignment="Left">
+                            <TextBlock x:Name="pricePetrolBlock" Background="FloralWhite"/>
+                        </Border>
+                        <TextBlock Text="рублей" Foreground="Black" FlowDirection="LeftToRight"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Grid Grid.Row="1" VerticalAlignment="Center" Margin="5,60,5,60">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,50,0,0">
+                        <Label Content="Способ продажи топлива" FontSize="30"/>
+                        <RadioButton x:Name="LitersRB" Content="Литры" FontSize="30" Margin="5" Checked="L_Checked"/>
+                        <RadioButton x:Name="RublesRB" Content="Рубли" FontSize="30" Margin="5" Checked="R_Checked"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,50,0,0" HorizontalAlignment="Left" Width="260">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Введите" FontSize="30"/>
+                            <Label x:Name="selectSaleRefill" FontSize="30"/>
+                        </StackPanel>
+
+                        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Width="250" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBox x:Name="methodSaleTextBox" Width="240" Height="90" FontSize="75" FontWeight="Bold" VerticalContentAlignment="Center" Background="FloralWhite" />
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+                <Border VerticalAlignment="Bottom" Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+                    <Grid Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Label Content="Заправка топлива" FontSize="30" FontWeight="Bold" VerticalAlignment="Top"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="0.00" FontSize="100" FontWeight="Bold" Padding="270,0,0,0" HorizontalAlignment="Right"/>
+                                <Label Content="литров" FontSize="50" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+            </Grid>
+
+        </GroupBox>
+
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Мини-Кафе" BorderBrush="Gray" BorderThickness="1" Margin="5" FontSize="30" FontWeight="Bold">
+            <Grid >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Меню" FontSize="30" FontWeight="Bold" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+                <DataGrid x:Name="menuDataGrid" ItemsSource="{Binding productsObserv}" SelectedItem="{Binding SelectedProduct}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" SelectionChanged="menuDataGrid_SelectionChanged" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Наименование" Binding="{Binding Path = Title, Mode=TwoWay}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Цена" Binding="{Binding Path = Price, Mode=TwoWay}" Width="120" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Количество" Binding="{Binding Path = ProductCount, Mode=TwoWay}" Width="190" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="2">
+
+                    <Label Content="Подобранные товары"  FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                </StackPanel>
+
+                <DataGrid x:Name="saleDataGrid" ItemsSource="{Binding saleproductsObserv}" SelectedItem="{Binding SaleSelectedProduct}" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Наименование Блюда" Binding="{Binding ProductName}"/>
+                        <DataGridTextColumn Header="Сумма покупки" Binding="{Binding Amount}"/>
+                        <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" />
+                        <DataGridTextColumn Header="Кассир" Binding="{Binding NameUsers}"/>
+                        <DataGridTextColumn Header="Дата/Время продажи" Binding="{Binding Date}"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+                <WrapPanel Grid.Column="0" Grid.Row="4">
+                    <RadioButton x:Name="TeaRB" Content="Чай" Checked="Tea_Checked"/>
+                    <RadioButton x:Name="CoffeeRB" Content="Кофе" Checked="Coffee_Checked"/>
+                    <RadioButton x:Name="AdditionsToTeaCoffeeRB" Content="Дополнения к чай-кофе" Checked="AdditionsToTeaCoffee_Checked" />
+                    <RadioButton x:Name="DessertRB" Content="Десерты" Checked="Dessert_Checked"/>
+                    <RadioButton x:Name="BreadAndSouceRB" Content="Хлеб и соуса" Checked="BreadAndSouce_Checked"/>
+                    <RadioButton x:Name="GarnishRB" Content="Гарнир" Checked="Garnish_Checked"/>
+                    <RadioButton x:Name="HotDishRB" Content="Горячие блюда" Checked="HotDish_Checked"/>
+                </WrapPanel>
+
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Label Content="Итого за бензин" />
+
+            <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5"  Width="100">
+                <TextBlock x:Name="fuelTxt" Text="0" Background="FloralWhite"/>
+            </Border>
+            <TextBlock Text="рублей" Foreground="Black" VerticalAlignment="Bottom"/>
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Label Content="Итого за кафе" />
+
+            <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Width="100">
+                <TextBlock x:Name="cafeTxt" Text="0" Background="FloralWhite" />
+            </Border>
+            <TextBlock Text="рублей" Foreground="Black" VerticalAlignment="Bottom"/>
+        </StackPanel>
+
+        <GroupBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Header="ИТОГО К ОПЛАТЕ" FontSize="24" BorderBrush="Gray" BorderThickness="1" Margin="5,0,5,0" FontWeight="Bold"/>
+
+        <StackPanel Grid.Row="3" HorizontalAlignment="Left" Margin="5,0,0,1" Orientation="Horizontal">
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ServiceBtn_Click" >
+                <TextBlock Text="Сервисное обслуживание F10" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+            </Button>
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="CancelBtn_Click">
+                <TextBlock Text="Отмена продажи F9" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            </Button>
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" >
+                <TextBlock Text="Чат техподдержки F1" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            </Button>
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="CashierBtn_Click">
+                <TextBlock Text="Смена кассира  Блокировка ПО F2" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            </Button>
+            <Button Style="{DynamicResource MyButtonStyle}"  Command ="{StaticResource cmd4}" HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ClosePSBtn_Click">
+                <TextBlock Text="Завершение работы системы F12" TextWrapping="Wrap" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,1" Orientation="Horizontal" >
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ExitBtn_Click">
+                <TextBlock Text="Выход из программы" TextWrapping="Wrap" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            </Button>
+            <Button Style="{DynamicResource MyButtonStyle}" HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ReportButton_Click">
+                <TextBlock Text="Отчёт по продажам за текущий день" TextWrapping="Wrap" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Label x:Name="titleLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Grid.Column="1" Grid.Row="3" FontSize="12"/>
+            <Image Source="/Image/Luk.png" Width="50" Height="50" VerticalAlignment="Center"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
