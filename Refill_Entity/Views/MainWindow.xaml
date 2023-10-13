@@ -247,15 +247,9 @@
 
                 </DataGrid>
 
-                <WrapPanel Grid.Column="0" Grid.Row="4">
-                    <RadioButton x:Name="TeaRB" Content="Чай" Checked="Tea_Checked"/>
-                    <RadioButton x:Name="CoffeeRB" Content="Кофе" Checked="Coffee_Checked"/>
-                    <RadioButton x:Name="AdditionsToTeaCoffeeRB" Content="Дополнения к чай-кофе" Checked="AdditionsToTeaCoffee_Checked" />
-                    <RadioButton x:Name="DessertRB" Content="Десерты" Checked="Dessert_Checked"/>
-                    <RadioButton x:Name="BreadAndSouceRB" Content="Хлеб и соуса" Checked="BreadAndSouce_Checked"/>
-                    <RadioButton x:Name="GarnishRB" Content="Гарнир" Checked="Garnish_Checked"/>
-                    <RadioButton x:Name="HotDishRB" Content="Горячие блюда" Checked="HotDish_Checked"/>
-                </WrapPanel>
+                <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Style="{DynamicResource MyButtonStyle}" Content="Отменить товар" FontSize="20" Click="saleDelBtn_Click"/>
+                </StackPanel>
 
             </Grid>
         </GroupBox>

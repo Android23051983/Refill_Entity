@@ -214,44 +214,24 @@ namespace Refill_Entity
             //    db.SaveChanges();
             //}
         }
-        private void Tea_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Coffee_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AdditionsToTeaCoffee_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Dessert_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BreadAndSouce_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Garnish_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void HotDish_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
 
         private void ReportButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void saleDelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+            {
+                var index = saleDataGrid.SelectedIndex;
+                saleDataGrid.Items.RemoveAt(index);
+            }
+            else if (PasswordWindow.valueStatus == 0)
+            {
+                MessageBox.Show("Товар может отменять только Старший Кассир или Администратор", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
