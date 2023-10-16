@@ -223,7 +223,7 @@
 
                 <Label Content="Меню" FontSize="30" FontWeight="Bold" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <DataGrid x:Name="menuDataGrid" ItemsSource="{Binding productsObserv}" SelectedItem="{Binding SelectedProduct}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" SelectionChanged="menuDataGrid_SelectionChanged" >
+                <DataGrid x:Name="menuDataGrid" ItemsSource="{Binding productsObserv, Mode=TwoWay}" SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" SelectionChanged="menuDataGrid_SelectionChanged" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Наименование" Binding="{Binding Path = Title, Mode=TwoWay}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Цена" Binding="{Binding Path = Price, Mode=TwoWay}" Width="120" IsReadOnly="True"/>
@@ -236,14 +236,15 @@
                     <Label Content="Подобранные товары"  FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </StackPanel>
 
-                <DataGrid x:Name="saleDataGrid" ItemsSource="{Binding saleproductsObserv}" SelectedItem="{Binding SaleSelectedProduct}" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
+                <DataGrid x:Name="saleDataGrid" ItemsSource="{Binding saleproductsObserv}" SelectedItem="{Binding SaleSelectedProduct}" IsSynchronizedWithCurrentItem="True" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Наименование Блюда" Binding="{Binding ProductName}"/>
-                        <DataGridTextColumn Header="Сумма покупки" Binding="{Binding Amount}"/>
-                        <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" />
-                        <DataGridTextColumn Header="Кассир" Binding="{Binding NameUsers}"/>
-                        <DataGridTextColumn Header="Дата/Время продажи" Binding="{Binding Date}"/>
+                        <DataGridTextColumn Header="Наименование Блюда" Binding="{Binding Path= ProductName, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Сумма покупки" Binding="{Binding Path = Amount, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Количество" Binding="{Binding Path= Quantity, Mode=TwoWay}" />
+                        <DataGridTextColumn Header="Кассир" Binding="{Binding Path = NameUsers, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Дата продажи" Binding="{Binding Path= Date, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Время продажи" Binding="{Binding Path=Time, Mode=TwoWay}"/>
                     </DataGrid.Columns>
 
                 </DataGrid>
@@ -256,7 +257,7 @@
         </GroupBox>
         
         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА ЗАПРАВКА" FontSize="20" FontWeight="Bold" Height="50" Width="200"/>
+            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА ЗАПРАВКА" FontSize="20" FontWeight="Bold" Height="50" Width="200" />
         </StackPanel>
         
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">

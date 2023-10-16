@@ -31,22 +31,9 @@ namespace Refill_Entity
             InitializeComponent();
             ViewModel = new MainWindowViewModel();
             DataContext = ViewModel;
-            this.Loaded += Window_load;
+            
         }
 
-        private void Window_load(object sender, RoutedEventArgs e)
-        {
-            using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
-            {
-                var result = db.Users.ToList();
-                foreach (var user in result)
-                {
-                    nameBox.Items.Add(user.Name);
-                }
-                nameBox.SelectedIndex = 0;
-            }
-             
-        }
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())

@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
 using Refill_Entity.Models;
 using Refill_Entity.ViewModels;
+using Refill_Entity.Views;
 
 namespace Refill_Entity
 {
@@ -24,10 +25,16 @@ namespace Refill_Entity
 
         private Sale Sale;
         public MainWindowViewModel ViewModel {  get; set; }
-        
+        public static Product? product;
+        public static double count;
+        public static decimal amount;
+        private int selectedIndex;
+
+        RefillAndMiniCafeContext db;
         public MainWindow()
         {
             InitializeComponent();
+            db = new RefillAndMiniCafeContext();
             ViewModel = new MainWindowViewModel();
             DataContext = ViewModel;
             Loaded += MainWindow_Loaded;
@@ -199,15 +206,25 @@ namespace Refill_Entity
 
         private void menuDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Product? product = menuDataGrid.SelectedItem as Product;
-            Sale = new() { ProductName = product!.Title, Amount = product.Price, Quantity = 0, NameUsers = PasswordWindow.userName!, Date = DateTime.Now };
-
-            MainWindowViewModel.saleproductsObserv = new ObservableCollection<Sale>();
-            MainWindowViewModel.saleproductsObserv.Add(Sale);
-            saleDataGrid.Items.Add(MainWindowViewModel.saleproductsObserv.ToBindingList());
-            
-
-            
+            selectedIndex = menuDataGrid.SelectedIndex;
+            product = ViewModel.productsObserv[selectedIndex];
+            //product = menuDataGrid.SelectedItem as Product;
+            QuantityWindow quantityWindow = new()
+            {
+                Owner = this
+            };
+            quantityWindow.ShowDialog();
+            if (quantityWindow.DialogResult == true)
+            {
+                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now};
+                ViewModel.saleproductsObserv = new ObservableCollection<Sale>();
+                ViewModel.saleproductsObserv.Add(Sale);
+                saleDataGrid.Items.Add(ViewModel.saleproductsObserv.ToBindingList());
+            }
+            else
+            {
+                menuDataGrid.UnselectAll();
+            }
 
             //using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
             //{
@@ -245,15 +262,21 @@ namespace Refill_Entity
 
         private void CafePaymentBtn_Click(object sender, RoutedEventArgs e)
         {
-            using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
+            //using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
+            //{
+            //    db.Sales.Add(Sale);
+            //    db.SaveChanges();
+            //    foreach (Sale sale in db.Sales)
+            //    {
+            //        MessageBox.Show($"Название товара {sale.ProductName}, стоимость товара {sale.Amount}, кол-во товара {sale.Quantity}, продавец {sale.NameUsers}, ");
+            //    }
+            //}
+            foreach (var item in ViewModel.productsObserv)
             {
-                db.Sales.Add(Sale);
                 db.SaveChanges();
-                foreach (Sale sale in db.Sales)
-                {
-                    MessageBox.Show($"Название товара {sale.ProductName}, стоимость товара {sale.Amount}, кол-во товара {sale.Quantity}, продавец {sale.NameUsers}, ");
-                }
+                //MessageBox.Show($"{item.Title}, {item.Price}, {item.ProductCount}");
             }
         }
+       
     }
 }

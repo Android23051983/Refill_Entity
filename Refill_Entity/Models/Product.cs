@@ -16,7 +16,7 @@ public partial class Product : Notify
     public string Title
     {
         get { return title!; }
-        set { title = value; OnPropertyChanged("Title"); }
+        set { title = value; OnPropertyChanged("ProductCount"); }
     }
 
     public decimal Price

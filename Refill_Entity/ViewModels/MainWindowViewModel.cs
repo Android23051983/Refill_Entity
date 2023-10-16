@@ -11,17 +11,17 @@ namespace Refill_Entity.ViewModels
 {
     public class MainWindowViewModel : Notify
     {
-        public List<User> Users { get; set; }
+        public ObservableCollection<User> UsersObserv { get; set; }
         public static List<string> petrolTitle = new();
-        private User? selecteduser;
+        private User? selectedUser;
 
-        public User Selecteduser
+        public User SelectedUser
         {
-            get => selecteduser!;
+            get => selectedUser!;
             set
             {
-                selecteduser = value;
-                OnPropertyChanged("Selecteduser");
+                selectedUser = value;
+                OnPropertyChanged("SelectedUser");
             }
         }
 
@@ -53,7 +53,7 @@ namespace Refill_Entity.ViewModels
             }
         }
 
-        public static ObservableCollection<Sale>? saleproductsObserv { get; set; }
+        public ObservableCollection<Sale>? saleproductsObserv { get; set; }
 
         /// <summary>
         /// выбранный из купленного товар
@@ -84,7 +84,17 @@ namespace Refill_Entity.ViewModels
                     Product product = new Product { Title = item.Title, Price = item.Price, ProductCount = item.ProductCount, Category = item.Category };
                     productsObserv.Add(product);
                 }
+
+                var tempUser = db.Users.ToList();
+                UsersObserv = new ObservableCollection<User>();
+                foreach (var item in tempUser)
+                {
+                    User user = new User { Name = item.Name, Passwd = item.Passwd, Status = item.Status };
+                    UsersObserv.Add(user);
+                }
             }
+
+            
             
         }
         public static void PetrolLoaded()
