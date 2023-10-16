@@ -29,7 +29,7 @@ namespace Refill_Entity
         public static double count;
         public static decimal amount;
         private int selectedIndex;
-
+        private decimal sumAmountCafe = 0;
         RefillAndMiniCafeContext db;
         public MainWindow()
         {
@@ -207,6 +207,7 @@ namespace Refill_Entity
         private void menuDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selectedIndex = menuDataGrid.SelectedIndex;
+            
             product = ViewModel.productsObserv[selectedIndex];
             //product = menuDataGrid.SelectedItem as Product;
             QuantityWindow quantityWindow = new()
@@ -216,16 +217,17 @@ namespace Refill_Entity
             quantityWindow.ShowDialog();
             if (quantityWindow.DialogResult == true)
             {
-                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now};
                 ViewModel.saleproductsObserv = new ObservableCollection<Sale>();
+                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now};
                 ViewModel.saleproductsObserv.Add(Sale);
+                db.Sales.Add(Sale);
                 saleDataGrid.Items.Add(ViewModel.saleproductsObserv.ToBindingList());
             }
             else
             {
                 menuDataGrid.UnselectAll();
             }
-
+            sumAmountCafe += amount;
             //using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
             //{
             //    db.Sales.Add(Sale);
@@ -243,16 +245,19 @@ namespace Refill_Entity
         {
             if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
             {
-                try
+                MessageBoxResult result = MessageBox.Show("Удалить всё кол-во товара - Yes", "Warning", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
                 {
-                    var index = saleDataGrid.SelectedIndex;
-                    saleDataGrid.Items.RemoveAt(index);
+                    try
+                    {
+                        var index = saleDataGrid.SelectedIndex;
+                        saleDataGrid.Items.RemoveAt(index);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
-                catch 
-                {
-                    MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                
             }
             else if (PasswordWindow.valueStatus == 0)
             {
@@ -266,17 +271,10 @@ namespace Refill_Entity
             //{
             //    db.Sales.Add(Sale);
             //    db.SaveChanges();
-            //    foreach (Sale sale in db.Sales)
-            //    {
-            //        MessageBox.Show($"Название товара {sale.ProductName}, стоимость товара {sale.Amount}, кол-во товара {sale.Quantity}, продавец {sale.NameUsers}, ");
-            //    }
+            
             //}
-            foreach (var item in ViewModel.productsObserv)
-            {
-                db.SaveChanges();
-                //MessageBox.Show($"{item.Title}, {item.Price}, {item.ProductCount}");
-            }
+
         }
-       
+
     }
 }
