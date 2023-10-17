@@ -217,11 +217,9 @@ namespace Refill_Entity
             quantityWindow.ShowDialog();
             if (quantityWindow.DialogResult == true)
             {
-                ViewModel.saleproductsObserv = new ObservableCollection<Sale>();
-                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now};
+                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now, Time = DateTime.Now.TimeOfDay };
                 ViewModel.saleproductsObserv.Add(Sale);
-                db.Sales.Add(Sale);
-                saleDataGrid.Items.Add(ViewModel.saleproductsObserv.ToBindingList());
+                //saleDataGrid.Items.Add(ViewModel.saleproductsObserv.ToBindingList());
             }
             else
             {

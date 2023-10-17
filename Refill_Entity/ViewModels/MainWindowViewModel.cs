@@ -92,8 +92,15 @@ namespace Refill_Entity.ViewModels
                     User user = new User { Name = item.Name, Passwd = item.Passwd, Status = item.Status };
                     UsersObserv.Add(user);
                 }
-            }
 
+                //var tempSale = db.Sales.ToList();
+                saleproductsObserv = new ObservableCollection<Sale>();
+                //foreach (var item in tempSale)
+                //{
+                //    Sale sale = new Sale { ProductName = item.ProductName, Amount = item.Amount, Quantity = item.Quantity, NameUsers = item.NameUsers, Date = item.Date, Time = item.Time };
+                //    saleproductsObserv.Add(sale);
+                //}
+            }
             
             
         }

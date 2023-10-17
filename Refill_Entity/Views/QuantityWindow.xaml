@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="quantityTextBox" Grid.Row="0" MinWidth="150" />
+        <TextBox x:Name="quantityTextBox" Grid.Row="0" MinWidth="150" FontSize="14" HorizontalContentAlignment="Center"/>
         <Button Content="OK" Grid.Row="1" Click="QWButton_Click"/>
     </Grid>
 </Window>
