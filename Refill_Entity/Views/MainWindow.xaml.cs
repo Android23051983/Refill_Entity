@@ -207,8 +207,14 @@ namespace Refill_Entity
         private void menuDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selectedIndex = menuDataGrid.SelectedIndex;
-            
-            product = ViewModel.productsObserv[selectedIndex];
+            try
+            {
+                product = ViewModel.productsObserv[selectedIndex];
+            }
+            catch (Exception)
+            {
+
+            }
             //product = menuDataGrid.SelectedItem as Product;
             QuantityWindow quantityWindow = new()
             {

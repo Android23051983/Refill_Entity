@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Refill_Entity.Models;
 
 
@@ -77,29 +78,13 @@ namespace Refill_Entity.ViewModels
         {
             using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
             {
-                var tempProduct = db.Products.ToList();
-                productsObserv = new ObservableCollection<Product>();
-                foreach (var item in tempProduct)
-                {
-                    Product product = new Product { Title = item.Title, Price = item.Price, ProductCount = item.ProductCount, Category = item.Category };
-                    productsObserv.Add(product);
-                }
+                db.Products.Load();
+                productsObserv = db.Products.Local.ToObservableCollection();
 
-                var tempUser = db.Users.ToList();
-                UsersObserv = new ObservableCollection<User>();
-                foreach (var item in tempUser)
-                {
-                    User user = new User { Name = item.Name, Passwd = item.Passwd, Status = item.Status };
-                    UsersObserv.Add(user);
-                }
+                db.Users.Load();
+                UsersObserv = db.Users.Local.ToObservableCollection();
 
-                //var tempSale = db.Sales.ToList();
                 saleproductsObserv = new ObservableCollection<Sale>();
-                //foreach (var item in tempSale)
-                //{
-                //    Sale sale = new Sale { ProductName = item.ProductName, Amount = item.Amount, Quantity = item.Quantity, NameUsers = item.NameUsers, Date = item.Date, Time = item.Time };
-                //    saleproductsObserv.Add(sale);
-                //}
             }
             
             
