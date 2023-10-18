@@ -14,6 +14,7 @@ namespace Refill_Entity.ViewModels
 {
     public class MainWindowViewModel : Notify
     {
+        #region OBSERVABLE COLLECTION AND FEATURES
         public ObservableCollection<User> UsersObserv { get; set; }
         public  List<string> petrolTitle = new();
         private User? selectedUser;
@@ -75,6 +76,7 @@ namespace Refill_Entity.ViewModels
                 OnPropertyChanged("SaleSelectedProduct");
             }
         }
+        #endregion
 
         public MainWindowViewModel()
         {
@@ -92,7 +94,51 @@ namespace Refill_Entity.ViewModels
             
         }
 
+
+        #region CANCELLATION OF THE PRODUCT IN saleDataGrid
+        public void saleGridDeleteProduct(ref DataGrid datagrid)
+        {
+            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+            {
+                MessageBoxResult result = MessageBox.Show("Удалить всё кол-во товара - Yes", "Warning", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        var index = datagrid.SelectedIndex;
+                        datagrid.Items.RemoveAt(index);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            }
+            else if (PasswordWindow.valueStatus == 0)
+            {
+                MessageBox.Show("Товар может отменять только Старший Кассир или Администратор", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        #endregion
+
         #region METHOD TO PETROL
+
+        public void PetrolSelection(ref ComboBox combobox, ref TextBlock textblock)
+        {
+            using (RefillAndMiniCafeContext db = new())
+            {
+                var result = db.Refills.ToList();
+                foreach (var petrol in result)
+                {
+                    if (petrol.Title == combobox.SelectedItem.ToString())
+                    {
+                        textblock.Text = petrol.Price.ToString("#.##");
+                    }
+
+                }
+            }
+        }
         public void PetrolLoaded(ref ComboBox combobox)
         {
             using (RefillAndMiniCafeContext db = new())

@@ -53,7 +53,7 @@ namespace Refill_Entity
             //Загрузка данных из базы бензин в лист petrolTitle
             //Переброска из petrolTitle в petrolBox
             ViewModel.PetrolLoaded(ref petrolBox);
-            //выведение сообщения в правый нижний угол главного окна сообщения о работающем кассире
+            //выведение сообщения в правый нижний угол главного окна о работающем кассире
             PasswordWindow.Cashier(ref titleLabel);
             
         }
@@ -64,7 +64,7 @@ namespace Refill_Entity
             {
                 saleDataGrid.Items.Clear();
             }
-            else if (PasswordWindow.valueStatus > 1)
+            else if (PasswordWindow.valueStatus < 1)
             {
                 PasswordWindow passwordWindow = new()
                 {
@@ -74,11 +74,6 @@ namespace Refill_Entity
                 titleLabel.Content = this.Title;
             }
         }
-
-       
-       
-        
-
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -124,18 +119,7 @@ namespace Refill_Entity
 
         private void petrolBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            using (RefillAndMiniCafeContext db = new())
-            {
-                var result = db.Refills.ToList();
-                foreach (var petrol in result)
-                {
-                    if (petrol.Title == petrolBox.SelectedItem.ToString())
-                    {
-                        pricePetrolBlock.Text = petrol.Price.ToString("#.##");
-                    }
-
-                }
-            }
+            ViewModel.PetrolSelection(ref petrolBox, ref pricePetrolBlock);
         }
 
         private void L_Checked(object sender, RoutedEventArgs e)
@@ -178,36 +162,18 @@ namespace Refill_Entity
             sumAmountCafe += amount;
            
         }
-       
+
+        private void saleDelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.saleGridDeleteProduct(ref saleDataGrid);
+        }
 
         private void ReportButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void saleDelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
-            {
-                MessageBoxResult result = MessageBox.Show("Удалить всё кол-во товара - Yes", "Warning", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        var index = saleDataGrid.SelectedIndex;
-                        saleDataGrid.Items.RemoveAt(index);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
-            }
-            else if (PasswordWindow.valueStatus == 0)
-            {
-                MessageBox.Show("Товар может отменять только Старший Кассир или Администратор", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
+        
 
         private void CafePaymentBtn_Click(object sender, RoutedEventArgs e)
         {
