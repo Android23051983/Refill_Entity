@@ -92,16 +92,13 @@
 
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="{StaticResource cmd1}" Executed="ServiceBtn_Click"></CommandBinding>                            
         <CommandBinding Command="{StaticResource cmd2}" Executed="CancelBtn_Click"></CommandBinding>
-        <CommandBinding Command="{StaticResource cmd3}" Executed="CashierBtn_Click"></CommandBinding>
-        <CommandBinding Command="{StaticResource cmd4}" Executed="ClosePSBtn_Click"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Key="F10" Command="{StaticResource cmd1}"></KeyBinding>
+        <KeyBinding Key="F10" Command="{Binding OpenServiceWind}"></KeyBinding>
         <KeyBinding Key="F9" Command="{StaticResource cmd2}"></KeyBinding>
-        <KeyBinding Key="F2" Command="{StaticResource cmd3}"></KeyBinding>
-        <KeyBinding Key="F12" Command="{StaticResource cmd4}"></KeyBinding>
+        <KeyBinding Key="F2" Command="{Binding OpenPasswordWind}"></KeyBinding>
+        <KeyBinding Key="F12" Command="{Binding ShutdownPs}"></KeyBinding>
     </Window.InputBindings>
     <Grid>
         <Grid.Background>
@@ -288,7 +285,7 @@
         <GroupBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Header="ИТОГО К ОПЛАТЕ" FontSize="24" BorderBrush="Gray" BorderThickness="1" Margin="5,0,5,0" FontWeight="Bold"/>
 
         <StackPanel Grid.Row="3" HorizontalAlignment="Left" Margin="5,0,0,1" Orientation="Horizontal">
-            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ServiceBtn_Click" >
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Command="{Binding OpenServiceWind}" >
                 <TextBlock Text="Сервисное обслуживание F10" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Button>
             <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="CancelBtn_Click">
@@ -297,10 +294,10 @@
             <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" >
                 <TextBlock Text="Чат техподдержки F1" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
             </Button>
-            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="CashierBtn_Click">
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Command="{Binding OpenPasswordWind}">
                 <TextBlock Text="Смена кассира  Блокировка ПО F2" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
             </Button>
-            <Button Style="{DynamicResource MyButtonStyle}"  Command ="{StaticResource cmd4}" HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ClosePSBtn_Click">
+            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Command="{Binding ShutdownPs}">
                 <TextBlock Text="Завершение работы системы F12" TextWrapping="Wrap" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
             </Button>
         </StackPanel>
@@ -313,7 +310,7 @@
             </Button>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Label x:Name="titleLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Grid.Column="1" Grid.Row="3" FontSize="12"/>
+            <Label x:Name="titleLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Grid.Column="1" Grid.Row="3" FontSize="12" />
             <Image Source="/Image/Luk.png" Width="50" Height="50" VerticalAlignment="Center"/>
         </StackPanel>
 

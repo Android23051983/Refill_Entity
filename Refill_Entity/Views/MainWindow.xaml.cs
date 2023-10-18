@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Refill_Entity.Models;
 using Refill_Entity.ViewModels;
 using Refill_Entity.Views;
@@ -49,38 +50,15 @@ namespace Refill_Entity
             };
             passwordWindow.ShowDialog();
             titleLabel.Content = this.Title;
-            MainWindowViewModel.PetrolLoaded();
-            foreach (var petrol in MainWindowViewModel.petrolTitle)
-            {
-                petrolBox.Items.Add(petrol);
-            }
-            petrolBox.SelectedIndex = 0;
+            //Загрузка данных из базы бензин в лист petrolTitle
+            //Переброска из petrolTitle в petrolBox
+            ViewModel.PetrolLoaded(ref petrolBox);
+            //выведение сообщения в правый нижний угол главного окна сообщения о работающем кассире
+            PasswordWindow.Cashier(ref titleLabel);
+            
         }
 
-        private void ServiceBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (PasswordWindow.valueStatus == 2)
-            {
-                ServiceWindow serviceWindow = new()
-                {
-                    Owner = this
-                };
-                serviceWindow.ShowDialog();
-            }
-            else if (PasswordWindow.valueStatus != 2)
-            {
-                MessageBox.Show("Смените кассира на Администратора");
-
-                PasswordWindow passwordWindow = new()
-                {
-                    Owner = this
-                };
-                passwordWindow.ShowDialog();
-                titleLabel.Content = this.Title;
-            }
-        }
-
-            private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
             {
@@ -97,44 +75,10 @@ namespace Refill_Entity
             }
         }
 
-        public void CashierBtn_Click(object sender, RoutedEventArgs e)
-        {
-            PasswordWindow passwordWindow = new()
-            {
-                Owner = this
-            };
-            passwordWindow.ShowDialog();
-            titleLabel.Content = this.Title;
-
-        }
        
-        private void PetrolPrice()
-        {
-            using (RefillAndMiniCafeContext db = new())
-            {
-                var result = db.Refills.ToList();
-                foreach (var petrol in result)
-                {
-                    if (petrol.Title == petrolBox.SelectedItem.ToString())
-                    {
-                        pricePetrolBlock.Text = petrol.Price.ToString();
-                    }
+       
+        
 
-                }
-            }
-        }
-
-        private void ClosePSBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
-            {
-                System.Diagnostics.Process.Start("cmd", "/c shutdown -s -f -t 00");
-            }
-            else if (PasswordWindow.valueStatus == 0)
-            {
-                MessageBox.Show("Завершать программу разрешено Старшему Кассиру или Администратору", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -225,18 +169,14 @@ namespace Refill_Entity
             {
                 Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now, Time = DateTime.Now.TimeOfDay };
                 ViewModel.saleproductsObserv.Add(Sale);
-                //saleDataGrid.Items.Add(ViewModel.saleproductsObserv.ToBindingList());
+                
             }
             else
             {
                 menuDataGrid.UnselectAll();
             }
             sumAmountCafe += amount;
-            //using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
-            //{
-            //    db.Sales.Add(Sale);
-            //    db.SaveChanges();
-            //}
+           
         }
        
 
@@ -271,13 +211,7 @@ namespace Refill_Entity
 
         private void CafePaymentBtn_Click(object sender, RoutedEventArgs e)
         {
-            //using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
-            //{
-            //    db.Sales.Add(Sale);
-            //    db.SaveChanges();
-            
-            //}
-
+           
         }
 
     }

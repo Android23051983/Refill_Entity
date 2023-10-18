@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using Refill_Entity.Models;
 
@@ -13,7 +15,7 @@ namespace Refill_Entity.ViewModels
     public class MainWindowViewModel : Notify
     {
         public ObservableCollection<User> UsersObserv { get; set; }
-        public static List<string> petrolTitle = new();
+        public  List<string> petrolTitle = new();
         private User? selectedUser;
 
         public User SelectedUser
@@ -89,7 +91,9 @@ namespace Refill_Entity.ViewModels
             
             
         }
-        public static void PetrolLoaded()
+
+        #region METHOD TO PETROL
+        public void PetrolLoaded(ref ComboBox combobox)
         {
             using (RefillAndMiniCafeContext db = new())
             {
@@ -99,8 +103,99 @@ namespace Refill_Entity.ViewModels
                     petrolTitle.Add(petrol.Title);
                 }
             }
+            foreach (var petrol in petrolTitle)
+            {
+                combobox.Items.Add(petrol);
+            }
+            combobox.SelectedIndex = 0;
         }
-        
-        
+        #endregion
+
+        #region METHOD SHUTDOWN PC 
+        private void ShutdownPsMethod()
+        {
+            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+            {
+                System.Diagnostics.Process.Start("cmd", "/c shutdown -s -f -t 00");
+            }
+            else if (PasswordWindow.valueStatus == 0)
+            {
+                MessageBox.Show("Завершать программу разрешено Старшему Кассиру или Администратору", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        #endregion
+
+        #region COMMAND SHUTDOWN PS
+        private RelayCommand shutdownPs;
+        public RelayCommand ShutdownPs
+        {
+            get
+            {
+                return shutdownPs ?? new RelayCommand(obj =>
+                {
+                    ShutdownPsMethod();
+                });
+            }
+        }
+        #endregion
+
+        #region METHODS TO OPEN WINDOWS
+        //Методы открытия окон
+        private void OpenServiceWindowMethod()
+        {
+            if (PasswordWindow.valueStatus == 2)
+            {
+                ServiceWindow newServiceWindow = new ServiceWindow();
+                SetParametersWindow(newServiceWindow);
+            }
+            else if (PasswordWindow.valueStatus != 2)
+            {
+                MessageBox.Show("Сервисное обслуживание может открывать только Администратор. Смените Кассира на администратора", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                
+            }
+        }
+
+        private void OpenPasswordWindowMethod()
+        {
+            PasswordWindow newPasswordWindow = new PasswordWindow();
+            SetParametersWindow(newPasswordWindow);
+            
+        }
+        //параметры устанавливаемые для открывающихся окон
+        private void SetParametersWindow(Window window)
+        {
+            window.Owner = Application.Current.MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.ShowDialog();
+        }
+        #endregion
+
+        #region COMMANDS TO OPEN WINDOWS
+
+        private RelayCommand openServiceWind;
+        public RelayCommand OpenServiceWind
+        {
+            get
+            {
+                return openServiceWind ?? new RelayCommand(obj =>
+                {
+                    OpenServiceWindowMethod();
+                });
+            }
+        }
+
+        private RelayCommand openPasswordWind;
+        public RelayCommand OpenPasswordWind
+        {
+            get
+            {
+                return openPasswordWind ?? new RelayCommand(obj =>
+                {
+                    OpenPasswordWindowMethod();
+                });
+            }
+        }
+
+        #endregion
     }
 }

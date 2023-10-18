@@ -26,12 +26,13 @@ namespace Refill_Entity
         public MainWindowViewModel ViewModel { get; set; }
         public static int valueStatus = -1; // переменная хранящая статус пользователя. Если пользователь не авторизовался значение равно -1
         public static string? userName;
+        static string title = "";
         public PasswordWindow()
         {
             InitializeComponent();
             ViewModel = new MainWindowViewModel();
             DataContext = ViewModel;
-            
+            nameBox.SelectedIndex = 0;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
@@ -45,9 +46,8 @@ namespace Refill_Entity
                     {
                         valueStatus = user.Status;
                         userName = user.Name;
-                        this.Owner.Title = $"Заправочный комплекс Лукойл (работает кассир: {user.Name})";
+                        title =  $"Заправочный комплекс Лукойл (работает кассир: {user.Name})";
                         this.DialogResult = true;
-                        nameBox.SelectedIndex = 0;
                     }
                 }
                 if (valueStatus == -1)
@@ -56,7 +56,10 @@ namespace Refill_Entity
                 }
             }
         }
-
+        public static void Cashier(ref Label label )
+        {
+            label.Content = title;
+        }
         protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
         {
 
