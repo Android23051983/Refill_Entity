@@ -32,8 +32,13 @@ namespace Refill_Entity
             InitializeComponent();
             ViewModel = new MainWindowViewModel();
             DataContext = ViewModel;
-            nameBox.SelectedIndex = 0;
+           
+           
         }
+
+       
+            //
+       
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {

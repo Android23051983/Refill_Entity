@@ -127,34 +127,34 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column1Btn_Click">
+                    <Button x:Name="ColumnNamber_1" Width="80" Height="80" Margin="10,5,10,5" Click="Column1Btn_Click">
                         <Image Source="/Refill1.png" />
                     </Button>
 
-                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column2Btn_Click">
+                    <Button x:Name="ColumnNamber_2" Width="80" Height="80" Margin="10,5,10,5" Click="Column2Btn_Click">
                         <Image Source="/Refill2.png" />
                     </Button>
 
-                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column3Btn_Click">
+                    <Button x:Name="ColumnNamber_3" Width="80" Height="80" Margin="10,5,10,5" Click="Column3Btn_Click">
                         <Image Source="/Refill3.png" />
                     </Button>
 
-                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column4Btn_Click">
+                    <Button x:Name="ColumnNamber_4" Width="80" Height="80" Margin="10,5,10,5" Click="Column4Btn_Click">
                         <Image Source="/Refill4.png" />
                     </Button>
 
-                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column5Btn_Click">
+                    <Button x:Name="ColumnNamber_5" Width="80" Height="80" Margin="10,5,10,5" Click="Column5Btn_Click">
                         <Image Source="/Refill5.png" />
                     </Button>
 
-                    <Button Width="80" Height="80" Margin="10,5,10,5" Click="Column6Btn_Click">
+                    <Button x:Name="ColumnNamber_6" Width="80" Height="80" Margin="10,5,10,5" Click="Column6Btn_Click">
                         <Image Source="/Refill6.png" />
                     </Button>
 
                 </StackPanel>
 
                 <StackPanel Grid.Row="1">
-                    <Label x:Name="columnNumber" Content="Колонка номер 1" FontSize="30" FontWeight="SemiBold" Margin="0,5,0,5"/>
+                    <Label x:Name="columnNumber" Content="ColumnNumber1" FontSize="30" FontWeight="SemiBold" Margin="0,5,0,5"/>
                     <Label Content="Заправляется Топливо марки" FontSize="30" FontWeight="SemiBold"/>
                     <ComboBox x:Name="petrolBox" Width="255" Height="30" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="18" FontWeight="SemiBold" Background="FloralWhite" SelectionChanged="petrolBox_SelectionChanged"/>
                     <Label Content="Цена топлива" FontSize="30" FontWeight="SemiBold" Margin="0,10,0,0"/>

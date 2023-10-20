@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,32 +90,33 @@ namespace Refill_Entity
 
         private void Column1Btn_Click(object sender, RoutedEventArgs e)
         {
-
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_1);
         }
 
         private void Column2Btn_Click(object sender, RoutedEventArgs e)
         {
-
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_2);
         }
 
         private void Column3Btn_Click(object sender, RoutedEventArgs e)
         {
-
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_3);
         }
 
         private void Column4Btn_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_4);
 
         }
 
         private void Column5Btn_Click(object sender, RoutedEventArgs e)
         {
-
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_5);
         }
 
         private void Column6Btn_Click(object sender, RoutedEventArgs e)
         {
-
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_6);
         }
 
         private void petrolBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -137,7 +139,10 @@ namespace Refill_Entity
             selectedIndex = menuDataGrid.SelectedIndex;
             try
             {
-                product = ViewModel.productsObserv[selectedIndex];
+                if (ViewModel.productsObserv is not null)
+                {
+                    product = ViewModel.productsObserv[selectedIndex];
+                }
             }
             catch (Exception)
             {
@@ -177,7 +182,20 @@ namespace Refill_Entity
 
         private void CafePaymentBtn_Click(object sender, RoutedEventArgs e)
         {
-           
+            
+
+            if (ViewModel.saleproductsObserv is not null)
+            {
+                db.Sales.UpdateRange(ViewModel.saleproductsObserv);
+                db.SaveChanges();
+            }
+            if (ViewModel.productsObserv is not null)
+            {
+                db.Products.UpdateRange(ViewModel.productsObserv);
+                db.SaveChanges();
+            }
+
+            ViewModel.NewCafeBuyer(ref cafeTxt);
         }
 
     }

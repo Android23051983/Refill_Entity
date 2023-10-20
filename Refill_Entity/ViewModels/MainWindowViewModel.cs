@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Refill_Entity.ViewModels
 {
     public class MainWindowViewModel : Notify
     {
+        RefillAndMiniCafeContext db = new RefillAndMiniCafeContext();
         #region OBSERVABLE COLLECTION AND FEATURES
         public ObservableCollection<User> UsersObserv { get; set; }
         public  List<string> petrolTitle = new();
@@ -80,19 +82,29 @@ namespace Refill_Entity.ViewModels
 
         public MainWindowViewModel()
         {
-            using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())
-            {
-                db.Products.Load();
-                productsObserv = db.Products.Local.ToObservableCollection();
 
-                db.Users.Load();
-                UsersObserv = db.Users.Local.ToObservableCollection();
+            db.Products.Load();
+            productsObserv = db.Products.Local.ToObservableCollection();
 
-                saleproductsObserv = new ObservableCollection<Sale>();
-            }
-            
+            db.Users.Load();
+            UsersObserv = db.Users.Local.ToObservableCollection();
+
+
+            saleproductsObserv = new ObservableCollection<Sale>();
+
             
         }
+
+        #region THE FUNCTIONALITY OF BRINGING A CAFE WINDOW TO SERVE A NEW CUSTOMER
+        public void NewCafeBuyer(ref TextBlock textblock)
+        {
+            textblock.Text = "0";
+            if (saleproductsObserv is not null)
+            {
+                saleproductsObserv.Clear();
+            }
+        }
+        #endregion
 
 
         #region CANCELLATION OF THE PRODUCT IN saleDataGrid
@@ -122,7 +134,12 @@ namespace Refill_Entity.ViewModels
 
         #endregion
 
-        #region METHOD TO PETROL
+        #region METHODS TO PETROL AND COLUMN
+
+        public void PetrolButton_Click(ref Label label, ref Button button)
+        {
+            label.Content = $"{button.Name}";
+        }
 
         public void PetrolSelection(ref ComboBox combobox, ref TextBlock textblock)
         {
@@ -155,7 +172,7 @@ namespace Refill_Entity.ViewModels
             }
             combobox.SelectedIndex = 0;
         }
-        #endregion
+        #endregion 
 
         #region METHOD SHUTDOWN PC 
         private void ShutdownPsMethod()
@@ -171,7 +188,7 @@ namespace Refill_Entity.ViewModels
         }
         #endregion
 
-        #region COMMAND SHUTDOWN PS
+        #region COMMAND SHUTDOWN PС
         private RelayCommand shutdownPs;
         public RelayCommand ShutdownPs
         {
