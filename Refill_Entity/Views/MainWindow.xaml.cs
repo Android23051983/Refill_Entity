@@ -33,6 +33,7 @@ namespace Refill_Entity
         private int selectedIndex;
         private decimal sumAmountCafe = 0;
         RefillAndMiniCafeContext db;
+   
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +41,8 @@ namespace Refill_Entity
             ViewModel = new MainWindowViewModel();
             DataContext = ViewModel;
             Loaded += MainWindow_Loaded;
+            // TRANSLITE ViewData to Data
+        
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -56,6 +59,7 @@ namespace Refill_Entity
             ViewModel.PetrolLoaded(ref petrolBox);
             //выведение сообщения в правый нижний угол главного окна о работающем кассире
             PasswordWindow.Cashier(ref titleLabel);
+           litersRB.IsChecked = true;
             
         }
 
@@ -90,48 +94,38 @@ namespace Refill_Entity
 
         private void Column1Btn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_1);
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_1, ref petrolBox);
         }
 
         private void Column2Btn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_2);
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_2, ref petrolBox);
         }
 
         private void Column3Btn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_3);
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_3, ref petrolBox);
         }
 
         private void Column4Btn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_4);
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_4, ref petrolBox);
 
         }
 
         private void Column5Btn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_5);
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_5, ref petrolBox);
         }
 
         private void Column6Btn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_6);
+            ViewModel.PetrolButton_Click(ref columnNumber, ref ColumnNamber_6, ref petrolBox);
         }
 
         private void petrolBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ViewModel.PetrolSelection(ref petrolBox, ref pricePetrolBlock);
-        }
-
-        private void L_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void R_Checked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void menuDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -197,6 +191,59 @@ namespace Refill_Entity
 
             ViewModel.NewCafeBuyer(ref cafeTxt);
         }
+
+        private void RefillPaymentBtn_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        #region ПЕРЕНОС ЗНАЧЕНИЙ ПОЛЕЙ ЭЛЕМЕНТОВ УПРАВЛЕНИЯ В ПЕРЕМЕННЫЕ
+
+        //private void SaleRefillEventHandle(object sender, TextChangedEventArgs e)
+        //{
+        //    columnNamber_1.methodSale_RefillTextBox = methodSale_RefillTextBox.Text;
+            
+        //}
+
+        //private void PricePetrolEventHandle(object sender, DependencyPropertyChangedEventArgs e)
+        //{
+        //    columnNamber_1.pricePetrolBlock = pricePetrolBlock.Text;
+        //}
+        //private void PetrolLitersEventHandle(object sender, DependencyPropertyChangedEventArgs e)
+        //{
+        //    columnNamber_1.petrolLiters = petrolLiters.Content.ToString();
+            
+        //}
+        //private void TotalPetrolPriceEventHandle(object sender, DependencyPropertyChangedEventArgs e)
+        //{
+        //    columnNamber_1.totalPetrolPriceTB = totalPetrolPriceTB.Text;
+
+        //}
+        //private void l_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    selectSaleRefill.Content = litersRB.Content;
+
+        //    columnNamber_1.litersRB = true;
+        //}
+
+        //private void litersRB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    columnNamber_1.litersRB = false;
+        //}
+
+        //private void r_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    selectSaleRefill.Content = rublesRB.Content;
+
+        //    columnNamber_1.rublesRB = true;
+        //}
+        //private void rublesRB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    columnNamber_1.rublesRB = false;
+        //}
+
+        #endregion
+
 
     }
 }

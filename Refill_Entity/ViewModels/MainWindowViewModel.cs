@@ -13,6 +13,12 @@ using Refill_Entity.Models;
 
 namespace Refill_Entity.ViewModels
 {
+    enum SelectRefill
+    {
+        Litres,
+        Rubles
+    }
+    
     public class MainWindowViewModel : Notify
     {
         RefillAndMiniCafeContext db = new RefillAndMiniCafeContext();
@@ -80,9 +86,70 @@ namespace Refill_Entity.ViewModels
         }
         #endregion
 
+        #region REFILL SALE DATA
+
+        private string? pricePetrolBlock;
+        private string? methodSale_RefillTextBox;
+        private string? petrolLiters = "0.00";
+        private string? totalPetrolPriceTB;
+        private string? columnNumber;
+        private string? selectSaleRefill_Content;
+        private string? litersRB_Content = "Литры";
+        private string? rublesRB_Content = "Рубли";
+
+        public string PricePetrolBlock
+        {
+            get => pricePetrolBlock ?? string.Empty;
+            set { pricePetrolBlock = value; OnPropertyChanged("PricePetrolBlock"); }
+        }
+        public string MethodSaleRefillTextBox
+        {
+            get => methodSale_RefillTextBox ?? string.Empty;
+            set { methodSale_RefillTextBox = value; OnPropertyChanged("MethodSaleRefillTextBox"); }
+        }
+
+        public string PetrolLiters
+        {
+            get => petrolLiters ?? string.Empty;
+            set { petrolLiters = value; OnPropertyChanged("PetrolLiters"); }
+        }
+
+        public string TotalPetrolPriceTB
+        {
+            get => totalPetrolPriceTB ?? string.Empty;
+            set { totalPetrolPriceTB = value; OnPropertyChanged("TotalPetrolPriceRB"); }
+        }
+
+        public string ColumnNumber
+        {
+            get => columnNumber ?? string.Empty;
+            set { columnNumber = value; OnPropertyChanged("ColumnNumber"); }
+        }
+
+        public string SelectSaleRefill_Content
+        {
+            get => selectSaleRefill_Content ?? string.Empty;
+            set { selectSaleRefill_Content = value; OnPropertyChanged("SelectSaleRefill"); }
+        }
+
+        public string LitersRB_Comtent
+        {
+            get => litersRB_Content ?? string.Empty;
+            set { litersRB_Content = value; OnPropertyChanged("LitersRB_Content"); }
+        }
+
+        public string RublesRB_Content
+        {
+            get => rublesRB_Content ?? string.Empty;
+            set {  rublesRB_Content = value;OnPropertyChanged("RublesRB_Content"); }
+        }
+
+        #endregion
+
+
         public MainWindowViewModel()
         {
-
+            
             db.Products.Load();
             productsObserv = db.Products.Local.ToObservableCollection();
 
@@ -94,6 +161,52 @@ namespace Refill_Entity.ViewModels
 
             
         }
+        #region RADIOBUTTON REFILL
+
+
+        SelectRefill selectRefill = SelectRefill.Litres;
+
+        private SelectRefill SelectRefill
+        { 
+            get => selectRefill; 
+            set 
+            { 
+                if(selectRefill == value) return;
+                selectRefill = value; 
+                OnPropertyChanged("SelectRefill"); 
+                OnPropertyChanged("LitersRB_Check"); 
+                OnPropertyChanged("RublesRB_Check"); 
+                OnPropertyChanged("GetResult"); 
+            } 
+        }
+
+        public bool LitersRB_Check
+        {
+            get { return SelectRefill == SelectRefill.Litres; }
+            set { SelectRefill = value? SelectRefill.Litres: SelectRefill;}
+        }
+
+        public bool RublesRB_Check
+        {
+            get { return SelectRefill == SelectRefill.Rubles;}
+            set { SelectRefill = value ? SelectRefill.Rubles : SelectRefill;}
+        }
+
+        public string GetResult
+        {
+            get
+            {
+                switch (SelectRefill)
+                {
+                    case SelectRefill.Litres:
+                        return litersRB_Content;
+                    case SelectRefill.Rubles:
+                        return rublesRB_Content;
+                }
+                return "";
+            }
+        }
+        #endregion
 
         #region THE FUNCTIONALITY OF BRINGING A CAFE WINDOW TO SERVE A NEW CUSTOMER
         public void NewCafeBuyer(ref TextBlock textblock)
@@ -136,9 +249,14 @@ namespace Refill_Entity.ViewModels
 
         #region METHODS TO PETROL AND COLUMN
 
-        public void PetrolButton_Click(ref Label label, ref Button button)
+        public void PetrolButton_Click(ref Label label, ref Button button,ref ComboBox combobox)
         {
             label.Content = $"{button.Name}";
+            int number = combobox.Items.Count;
+            Random rnd = new Random();
+            int randValue = rnd.Next(0, number-1);
+            combobox.SelectedIndex = randValue;
+
         }
 
         public void PetrolSelection(ref ComboBox combobox, ref TextBlock textblock)
@@ -172,7 +290,25 @@ namespace Refill_Entity.ViewModels
             }
             combobox.SelectedIndex = 0;
         }
-        #endregion 
+
+        public void NewRefillBuyer(ref Label PetrolLiters, ref RadioButton LitersRB, ref RadioButton RublesRB, ref TextBox methodSale_RefillTextBox, ref TextBlock pricePetrolBlock)
+        {
+            if (LitersRB.IsChecked == true)
+            {
+                float n = float.Parse(methodSale_RefillTextBox.Text);
+                for (float i = n; i > 0; i--)
+                {
+                    PetrolLiters.Content = i.ToString();
+                }
+            }
+            else if(RublesRB.IsChecked == true)
+            {
+                float rub = float.Parse(methodSale_RefillTextBox.Text);
+                float pricePetrol = float.Parse(pricePetrolBlock.Text);
+
+            }
+        }
+        #endregion
 
         #region METHOD SHUTDOWN PC 
         private void ShutdownPsMethod()
