@@ -167,13 +167,6 @@ namespace Refill_Entity
             ViewModel.saleGridDeleteProduct(ref saleDataGrid);
         }
 
-        private void ReportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        
-
         private void CafePaymentBtn_Click(object sender, RoutedEventArgs e)
         {
             

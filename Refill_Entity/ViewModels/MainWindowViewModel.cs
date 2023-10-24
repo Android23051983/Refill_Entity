@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using Refill_Entity.Models;
+using Refill_Entity.Views;
 
 
 namespace Refill_Entity.ViewModels
@@ -353,6 +354,11 @@ namespace Refill_Entity.ViewModels
                 
             }
         }
+        private void OpenDayReportSaleWindow()
+        {
+            DaySaleReportWindow newDaySaleReportWindow = new DaySaleReportWindow();
+            SetParametersWindow(newDaySaleReportWindow);
+        }
 
         private void OpenPasswordWindowMethod()
         {
@@ -370,6 +376,17 @@ namespace Refill_Entity.ViewModels
         #endregion
 
         #region COMMANDS TO OPEN WINDOWS
+        private RelayCommand openDayReportSaleWnd;
+        public RelayCommand OpenDayReportSaleWnd
+        {
+            get
+            {
+                return openDayReportSaleWnd ?? new RelayCommand(obj=>
+                {
+                    OpenDayReportSaleWindow();
+                });
+            }
+        }
 
         private RelayCommand openServiceWind;
         public RelayCommand OpenServiceWind

@@ -309,7 +309,7 @@
             <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ExitBtn_Click">
                 <TextBlock Text="Выход из программы" TextWrapping="Wrap" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
             </Button>
-            <Button Style="{DynamicResource MyButtonStyle}" HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="ReportButton_Click">
+            <Button Style="{DynamicResource MyButtonStyle}" HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Command="{Binding OpenDayReportSaleWnd}">
                 <TextBlock Text="Отчёт по продажам за текущий день" TextWrapping="Wrap" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
             </Button>
         </StackPanel>

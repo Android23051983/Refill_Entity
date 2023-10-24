@@ -104,7 +104,7 @@
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
 
-        <GroupBox x:Name="productGB" Header="Просмотр и редактирование Базы Данных" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold" Visibility="Hidden">
+        <GroupBox x:Name="productGB" Header="Просмотр и редактирование Базы Данных" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
             <DataGrid x:Name="dataGrid" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" Visibility="Hidden">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Наименование" Binding="{Binding Title}" />
@@ -135,9 +135,24 @@
             </DataGrid>
         </GroupBox>
 
-        <GroupBox Header="Настройки" BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
+        <GroupBox Header="Отчеты по базам данных" BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
+            <DataGrid x:Name="dataGrid_Reports" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" Visibility="Hidden" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Наименование" Binding="{Binding Title}" Width="*"/>
+                    <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="*"/>
+                    <DataGridTextColumn Header="Количество" Binding="{Binding ProductCount}" Width="*"/>
+                    <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </GroupBox>
 
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left">
+            <Label FontSize="14" Content="Товары по категориям" FontWeight="Bold"/>
+            <ComboBox FontSize="14" Width="150" BorderBrush="LightGray" BorderThickness="2">
+                
+            </ComboBox>
+        </StackPanel>
+        
         <StackPanel Grid.Column="0" Grid.Row="1">
 
             <Label Content="Выберите таблицу" Grid.Column="0" Grid.Row="1" FontSize="15" FontWeight="Bold"/>
