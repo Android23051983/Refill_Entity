@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:Refill_Entity.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="Заправочный комплекс Лукойл" MinHeight="1080" MinWidth="1920"
+        Title="Заправочный комплекс Лукойл" 
         WindowStyle="None"
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
