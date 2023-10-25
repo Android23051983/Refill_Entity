@@ -236,7 +236,7 @@
                 <DataGrid x:Name="saleDataGrid" ItemsSource="{Binding saleproductsObserv}" SelectedItem="{Binding SaleSelectedProduct}" IsSynchronizedWithCurrentItem="True" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Наименование Блюда" Binding="{Binding Path= ProductName, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Наименование Товара" Binding="{Binding Path= ProductName, Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Сумма покупки" Binding="{Binding Path = Amount, Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Количество" Binding="{Binding Path= Quantity, Mode=TwoWay}" />
                         <DataGridTextColumn Header="Кассир" Binding="{Binding Path = NameUsers, Mode=TwoWay}"/>

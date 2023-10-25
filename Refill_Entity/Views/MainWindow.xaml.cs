@@ -187,7 +187,15 @@ namespace Refill_Entity
 
         private void RefillPaymentBtn_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (selectSaleRefill.Content.ToString() == "Литры")
+            {
+                var result = float.Parse(pricePetrolBlock.Text) * float.Parse(methodSale_RefillTextBox.Text);
+                totalPetrolPriceTB.Text = result.ToString();
+            }
+            else if (selectSaleRefill.Content.ToString() == "Рубли")
+            { 
+                totalPetrolPriceTB.Text = methodSale_RefillTextBox?.Text;
+            }
         }
 
 

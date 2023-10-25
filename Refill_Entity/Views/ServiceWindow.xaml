@@ -104,7 +104,7 @@
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
 
-        <GroupBox x:Name="productGB" Header="Просмотр и редактирование Базы Данных" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
+        <GroupBox x:Name="productGB" Header="Просмотр и редактирование Базы Данных Продукты" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
             <DataGrid x:Name="dataGrid" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" Visibility="Hidden">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Наименование" Binding="{Binding Title}" />
@@ -115,7 +115,7 @@
             </DataGrid>
 
         </GroupBox>
-        <GroupBox x:Name="fuelGB" Header="Просмотр и редактирование Базы Данных" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold" Visibility="Hidden">
+        <GroupBox x:Name="fuelGB" Header="Просмотр и редактирование Базы Данных Бензин" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold" Visibility="Hidden">
             <DataGrid x:Name="fuelDG" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Наименование" Binding="{Binding Title}" />
@@ -125,7 +125,7 @@
             </DataGrid>
         </GroupBox>
 
-        <GroupBox x:Name="userGB" Header="Просмотр и редактирование Базы Данных" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold" Visibility="Hidden">
+        <GroupBox x:Name="userGB" Header="Просмотр и редактирование Базы Данных Кассиры" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold" Visibility="Hidden">
             <DataGrid x:Name="userDG" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" Visibility="Hidden">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Кассир" Binding="{Binding Name}" />
@@ -135,11 +135,11 @@
             </DataGrid>
         </GroupBox>
 
-        <GroupBox Header="Отчеты по базам данных" BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
-            <DataGrid x:Name="dataGrid_Reports" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
+        <GroupBox Header="Отчеты по продажам" BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
+            <DataGrid x:Name="dataGrid_Reports" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False" IsReadOnly="True">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Наименование Блюда" Binding="{Binding ProductName}"/>
+                    <DataGridTextColumn Header="Наименование Товара" Binding="{Binding ProductName}"/>
                     <DataGridTextColumn Header="Сумма покупки" Binding="{Binding Amount}"/>
                     <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" />
                     <DataGridTextColumn Header="Кассир" Binding="{Binding NameUsers}"/>
@@ -193,7 +193,7 @@
 
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Orientation="Horizontal">
             <Button x:Name="updateDB" Content="Обновить" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Width="100" Height="30" VerticalAlignment="Center" FontSize="15" Margin="20,0,20,0" Click="updateDBButton_Click"/>
             <Button x:Name="deleteDB" Content="Удалить" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center"  Width="100" Height="30"  FontSize="15" Margin="20,0,20,0" Click="deleteDBButton_Click"/>
 
