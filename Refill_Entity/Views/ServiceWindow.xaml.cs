@@ -29,8 +29,14 @@ namespace Refill_Entity
             InitializeComponent();
             db = new RefillAndMiniCafeContext();
             ProductsRB.IsChecked = true;
+            Loaded += ServiceWindow_Loaded;
             this.Closing += ServiceWindow_Closing!;
 
+        }
+
+        private void ServiceWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            ReportDate.DataContext = DateTime.Today;
         }
 
         private void ServiceWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -134,7 +140,40 @@ namespace Refill_Entity
                 db.SaveChanges();
             }
         }
-            
+
+        private void ReportByCategory_Click(object sender, RoutedEventArgs e)
+        {
+            dataGrid_Reports.Items.Clear();
+            CountPeriodSaleProduct.Text = "";
+            CountSaleProduct.Text = "";
+            db.Sales.Load();
+            var value = db.Sales.Where(s=> s.Date == ReportDate.SelectedDate);
+            var countSum = value.Sum(s => s.Quantity); 
+            var sum = value.Sum(s => s.Amount);
+            foreach (var item in value)
+            {
+                dataGrid_Reports.Items.Add(item);
+            }
+            dataGrid_Reports.Visibility = Visibility.Visible;
+            CountSaleProduct.Text = $"{countSum} товара продано на сумму {sum:#####.##} рублей";
+        }
+
+        private void ReportPeriodByCategory_Click(object sender, RoutedEventArgs e)
+        {
+            dataGrid_Reports.Items.Clear();
+            CountPeriodSaleProduct.Text = "";
+            CountSaleProduct.Text = "";
+            db.Sales.Load();
+            var value = db.Sales.Where(s => s.Date >= startDate.SelectedDate && s.Date <= endDate.SelectedDate);
+            var countSum = value.Sum(s => s.Quantity);
+            var sum = value.Sum(s => s.Amount);
+            foreach (var item in value)
+            {
+                dataGrid_Reports.Items.Add(item);
+            }
+            dataGrid_Reports.Visibility = Visibility.Visible;
+            CountPeriodSaleProduct.Text = $"{countSum} товара продано на сумму {sum:#####.##} рублей";
+        }
     }
 }
 

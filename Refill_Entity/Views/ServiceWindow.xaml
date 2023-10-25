@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Refill_Entity"
         mc:Ignorable="d"
-        Title="ServiceWindow" Height="1080" Width="1920"
+        Title="ServiceWindow" 
         ResizeMode="NoResize"
         WindowState="Maximized">
     <Window.Resources>
@@ -136,23 +136,51 @@
         </GroupBox>
 
         <GroupBox Header="Отчеты по базам данных" BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="2" FontSize="18" FontWeight="Bold">
-            <DataGrid x:Name="dataGrid_Reports" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" Visibility="Hidden" >
+            <DataGrid x:Name="dataGrid_Reports" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Наименование" Binding="{Binding Title}" Width="*"/>
-                    <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="*"/>
-                    <DataGridTextColumn Header="Количество" Binding="{Binding ProductCount}" Width="*"/>
-                    <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="*"/>
+                    <DataGridTextColumn Header="Наименование Блюда" Binding="{Binding ProductName}"/>
+                    <DataGridTextColumn Header="Сумма покупки" Binding="{Binding Amount}"/>
+                    <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" />
+                    <DataGridTextColumn Header="Кассир" Binding="{Binding NameUsers}"/>
+                    <DataGridTextColumn Header="Дата продажи" Binding="{Binding Date}"/>
+                    <DataGridTextColumn Header="Время продажи" Binding="{Binding Time}"/>
                 </DataGrid.Columns>
+
             </DataGrid>
         </GroupBox>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0"  VerticalAlignment="Center">
 
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left">
-            <Label FontSize="14" Content="Товары по категориям" FontWeight="Bold"/>
-            <ComboBox FontSize="14" Width="150" BorderBrush="LightGray" BorderThickness="2">
-                
-            </ComboBox>
-        </StackPanel>
-        
+                <Label FontSize="15" Content="Проданные товары за выбранную дату" HorizontalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Width="Auto" Height="40" Margin="5">
+                    <TextBlock x:Name="CountSaleProduct" HorizontalAlignment="Center"  FontSize="14" Width="Auto" Height="30" Margin="5" />
+                </Border>
+                <DatePicker x:Name="ReportDate" Margin="5"/>
+                <Button Width="100" Height="30" Margin="5" Content="Вывод отчёта" FontSize="15" Click="ReportByCategory_Click"/>
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"  VerticalAlignment="Center" >
+
+                <Label FontSize="15" Content="Проданные товары за выбранный период" HorizontalAlignment="Center" FontWeight="Bold" Margin="5,7,5,5"/>
+                <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Width="Auto" Height="40" Margin="5">
+                    <TextBlock x:Name="CountPeriodSaleProduct" HorizontalAlignment="Center"  FontSize="14" Width="Auto" Height="30" Margin="5" />
+                </Border>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Начальная дата" Margin="5"/>
+                    <DatePicker x:Name="startDate" Margin="5"/>
+                    <Label Content="Конечная дата" Margin="5"/>
+                    <DatePicker x:Name="endDate" Margin="5"/>
+                </StackPanel>
+                <Button Width="100" Height="30" Margin="5" Content="Вывод отчёта" FontSize="15" Click="ReportPeriodByCategory_Click"/>
+
+            </StackPanel>
+        </Grid>
         <StackPanel Grid.Column="0" Grid.Row="1">
 
             <Label Content="Выберите таблицу" Grid.Column="0" Grid.Row="1" FontSize="15" FontWeight="Bold"/>

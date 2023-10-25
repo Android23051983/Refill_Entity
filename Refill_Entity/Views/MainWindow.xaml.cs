@@ -150,7 +150,7 @@ namespace Refill_Entity
             quantityWindow.ShowDialog();
             if (quantityWindow.DialogResult == true)
             {
-                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Now, Time = DateTime.Now.TimeOfDay };
+                Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
                 ViewModel.saleproductsObserv.Add(Sale);
                 
             }
@@ -189,53 +189,6 @@ namespace Refill_Entity
         {
             
         }
-
-        #region ПЕРЕНОС ЗНАЧЕНИЙ ПОЛЕЙ ЭЛЕМЕНТОВ УПРАВЛЕНИЯ В ПЕРЕМЕННЫЕ
-
-        //private void SaleRefillEventHandle(object sender, TextChangedEventArgs e)
-        //{
-        //    columnNamber_1.methodSale_RefillTextBox = methodSale_RefillTextBox.Text;
-            
-        //}
-
-        //private void PricePetrolEventHandle(object sender, DependencyPropertyChangedEventArgs e)
-        //{
-        //    columnNamber_1.pricePetrolBlock = pricePetrolBlock.Text;
-        //}
-        //private void PetrolLitersEventHandle(object sender, DependencyPropertyChangedEventArgs e)
-        //{
-        //    columnNamber_1.petrolLiters = petrolLiters.Content.ToString();
-            
-        //}
-        //private void TotalPetrolPriceEventHandle(object sender, DependencyPropertyChangedEventArgs e)
-        //{
-        //    columnNamber_1.totalPetrolPriceTB = totalPetrolPriceTB.Text;
-
-        //}
-        //private void l_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    selectSaleRefill.Content = litersRB.Content;
-
-        //    columnNamber_1.litersRB = true;
-        //}
-
-        //private void litersRB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    columnNamber_1.litersRB = false;
-        //}
-
-        //private void r_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    selectSaleRefill.Content = rublesRB.Content;
-
-        //    columnNamber_1.rublesRB = true;
-        //}
-        //private void rublesRB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    columnNamber_1.rublesRB = false;
-        //}
-
-        #endregion
 
 
     }
