@@ -23,6 +23,7 @@ namespace Refill_Entity.ViewModels
     public class MainWindowViewModel : Notify
     {
         RefillAndMiniCafeContext db = new RefillAndMiniCafeContext();
+        string? PrintStr = "";
         #region OBSERVABLE COLLECTION AND FEATURES
         public ObservableCollection<User> UsersObserv { get; set; }
         public  List<string> petrolTitle = new();
@@ -200,9 +201,9 @@ namespace Refill_Entity.ViewModels
                 switch (SelectRefill)
                 {
                     case SelectRefill.Litres:
-                        return litersRB_Content;
+                        return litersRB_Content!;
                     case SelectRefill.Rubles:
-                        return rublesRB_Content;
+                        return rublesRB_Content!;
                 }
                 return "";
             }
@@ -408,6 +409,40 @@ namespace Refill_Entity.ViewModels
                 return openPasswordWind ?? new RelayCommand(obj =>
                 {
                     OpenPasswordWindowMethod();
+                });
+            }
+        }
+
+        #endregion
+
+        #region METHOD CHECK
+        private void Print()
+        {                
+            PrintStr += "--------------------------------------------\n\r";
+            PrintStr += "Заправочный комплекс Лукойл \n\r";
+            PrintStr += "--------------------------------------------\n\r";
+            foreach (var item in saleproductsObserv) 
+            {
+                //PrintStr = $"{item.ProductName} Количество {item.Quantity} цена {item.Amount}";
+                PrintStr += $"{item.ProductName} X {item.Quantity} = {item.Amount} рублей\n\r";
+                //MessageBox.Show($"Товар {item.ProductName} Количество {item.Quantity} Цена {item.Amount}\nПродавец: {item.NameUsers}\nДата\\Время: {item.Date} {item.Time}");
+            }
+            PrintStr += $"------------------------------------------------------------------\n\rПродавец: {PasswordWindow.userName}\n\rДата\\Время: {DateTime.Now}";
+            MessageBoxResult result = MessageBox.Show(PrintStr, "Чек", MessageBoxButton.OKCancel);
+            PrintStr = "";
+   
+        }
+        #endregion
+
+        #region COMMANDA CHECK
+        private RelayCommand printCommand;
+        public RelayCommand PrintCommand
+        {
+            get
+            {
+                return printCommand ?? new RelayCommand(obj => 
+                {
+                    Print();
                 });
             }
         }

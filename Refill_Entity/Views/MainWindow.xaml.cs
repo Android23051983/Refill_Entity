@@ -191,11 +191,16 @@ namespace Refill_Entity
             {
                 var result = float.Parse(pricePetrolBlock.Text) * float.Parse(methodSale_RefillTextBox.Text);
                 totalPetrolPriceTB.Text = result.ToString();
+                Sale = new() { ProductName = petrolBox.SelectedItem.ToString()!, Amount = decimal.Parse(totalPetrolPriceTB.Text!), Quantity = double.Parse(methodSale_RefillTextBox.Text), NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
             }
             else if (selectSaleRefill.Content.ToString() == "Рубли")
             { 
                 totalPetrolPriceTB.Text = methodSale_RefillTextBox?.Text;
+                var litersD = Convert.ToDouble(selectSaleRefill.Content) / Convert.ToDouble(pricePetrolBlock.Text);
+                Sale = new() { ProductName = petrolBox.SelectedItem.ToString()!, Amount = decimal.Parse(totalPetrolPriceTB.Text!), Quantity =litersD, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
             }
+            ViewModel.saleproductsObserv?.Add(Sale);
+            
         }
 
 

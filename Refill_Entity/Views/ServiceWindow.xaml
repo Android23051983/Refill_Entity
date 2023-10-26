@@ -156,11 +156,25 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0"  VerticalAlignment="Center">
 
-                <Label FontSize="15" Content="Проданные товары за выбранную дату" HorizontalAlignment="Center" FontWeight="Bold" Margin="5"/>
-                <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Width="Auto" Height="40" Margin="5">
-                    <TextBlock x:Name="CountSaleProduct" HorizontalAlignment="Center"  FontSize="14" Width="Auto" Height="30" Margin="5" />
-                </Border>
-                <DatePicker x:Name="ReportDate" Margin="5"/>
+                <Label FontSize="15" Content="Проданные товары выбранного кассира за период" HorizontalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Кассир" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial"/>
+                    <ComboBox x:Name="ReportUserCB" Grid.Column="1" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"/>
+                    <Border Grid.Column="2" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Width="Auto" Height="40" Margin="5">
+                        <TextBlock x:Name="CountSaleProduct" Grid.Column="2" HorizontalAlignment="Center"  FontSize="14" Width="Auto" Height="30" Margin="5" />
+                    </Border>
+                </Grid>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Начальная дата" Margin="5"/>
+                    <DatePicker x:Name="startDate1" Margin="5"/>
+                    <Label Content="Конечная дата" Margin="5"/>
+                    <DatePicker x:Name="endDate2" Margin="5"/>
+                </StackPanel>
                 <Button Width="100" Height="30" Margin="5" Content="Вывод отчёта" FontSize="15" Click="ReportByCategory_Click"/>
 
             </StackPanel>

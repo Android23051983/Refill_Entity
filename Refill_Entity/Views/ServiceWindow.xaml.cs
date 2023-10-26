@@ -36,7 +36,12 @@ namespace Refill_Entity
 
         private void ServiceWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            ReportDate.DataContext = DateTime.Today;
+            db.Users.Load();
+            var user = db.Users.Select(s => s.Name);
+            foreach (var item in user)
+            {
+                ReportUserCB.Items.Add(item);
+            }
         }
 
         private void ServiceWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -147,15 +152,14 @@ namespace Refill_Entity
             CountPeriodSaleProduct.Text = "";
             CountSaleProduct.Text = "";
             db.Sales.Load();
-            var value = db.Sales.Where(s=> s.Date == ReportDate.SelectedDate);
-            var countSum = value.Sum(s => s.Quantity); 
+            var value = db.Sales.Where(s => s.NameUsers == ReportUserCB.SelectedItem.ToString());
+            var countSum = value.Sum(s => s.Quantity);
             var sum = value.Sum(s => s.Amount);
             foreach (var item in value)
             {
                 dataGrid_Reports.Items.Add(item);
             }
-            dataGrid_Reports.Visibility = Visibility.Visible;
-            CountSaleProduct.Text = $"{countSum} товара продано на сумму {sum:#####.##} рублей";
+            CountSaleProduct.Text = $"{countSum} товара на сумму {sum:#####.##} рублей";
         }
 
         private void ReportPeriodByCategory_Click(object sender, RoutedEventArgs e)
