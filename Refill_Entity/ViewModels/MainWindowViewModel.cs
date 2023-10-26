@@ -10,6 +10,8 @@ using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using Refill_Entity.Models;
 using Refill_Entity.Views;
+using System.Printing;
+using System.Windows.Documents;
 
 
 namespace Refill_Entity.ViewModels
@@ -415,26 +417,60 @@ namespace Refill_Entity.ViewModels
 
         #endregion
 
-        #region METHOD CHECK
+        #region METHOD CHECK AND PRINTING
         private void Print()
         {                
-            PrintStr += "--------------------------------------------\n\r";
-            PrintStr += "Заправочный комплекс Лукойл \n\r";
-            PrintStr += "--------------------------------------------\n\r";
+            PrintStr += "--------------------------------------------\n";
+            PrintStr += "Заправочный комплекс Лукойл \n";
+            PrintStr += "--------------------------------------------\n";
             foreach (var item in saleproductsObserv) 
             {
-                //PrintStr = $"{item.ProductName} Количество {item.Quantity} цена {item.Amount}";
-                PrintStr += $"{item.ProductName} X {item.Quantity} = {item.Amount} рублей\n\r";
-                //MessageBox.Show($"Товар {item.ProductName} Количество {item.Quantity} Цена {item.Amount}\nПродавец: {item.NameUsers}\nДата\\Время: {item.Date} {item.Time}");
+                PrintStr += $"{item.ProductName} X {item.Quantity} = {item.Amount.ToString("#####.##")} рублей\n";
             }
-            PrintStr += $"------------------------------------------------------------------\n\rПродавец: {PasswordWindow.userName}\n\rДата\\Время: {DateTime.Now}";
-            MessageBoxResult result = MessageBox.Show(PrintStr, "Чек", MessageBoxButton.OKCancel);
-            PrintStr = "";
-   
+            var totalAmount = saleproductsObserv.Sum(x => x.Amount);
+            PrintStr += $"------------------------------------------------------------------\n";
+            PrintStr += $"ИТОГО: {totalAmount.ToString("#####.##")} рублей\n";
+            PrintStr += $"------------------------------------------------------------------\n";
+            PrintStr += $"Продавец: {PasswordWindow.userName}\nДата\\Время: {DateTime.Now}";
+            MessageBoxResult result = MessageBox.Show(PrintStr, "Чек", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Yes)
+            {
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    FixedDocument fixedDocument = CreateFixedDocument();
+                    printDialog.PrintDocument(fixedDocument.DocumentPaginator, "Fixed Document");
+                }
+                PrintStr = "";
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                PrintStr = "";
+            }
         }
+
+        private FixedDocument CreateFixedDocument()
+        {
+            FixedDocument fixedDocument = new FixedDocument();
+            fixedDocument.DocumentPaginator.PageSize = new Size(96 * 8.5, 96 * 11); // Размер страницы в пунктах (1 дюйм = 96 пунктов)
+
+            PageContent pageContent = new PageContent();
+            fixedDocument.Pages.Add(pageContent);
+
+            FixedPage fixedPage = new FixedPage();
+            pageContent.Child = fixedPage;
+            TextBlock textBlock = new TextBlock();
+            textBlock.Text = PrintStr;
+            textBlock.FontSize = 14;
+            textBlock.Margin = new Thickness(16, 2, 0, 0);
+            fixedPage.Children.Add(textBlock);
+
+            return fixedDocument;
+        }
+
         #endregion
 
-        #region COMMANDA CHECK
+            #region COMMANDA CHECK
         private RelayCommand printCommand;
         public RelayCommand PrintCommand
         {
