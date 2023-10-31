@@ -12,6 +12,8 @@ using Refill_Entity.Models;
 using Refill_Entity.Views;
 using System.Printing;
 using System.Windows.Documents;
+using System.Windows.Threading;
+using System.Windows.Automation;
 
 
 namespace Refill_Entity.ViewModels
@@ -24,12 +26,17 @@ namespace Refill_Entity.ViewModels
     
     public class MainWindowViewModel : Notify
     {
+        //Коллекции для таблиц из базы данных и их свойства и некоторые переменные для таймера и строки для печати
         RefillAndMiniCafeContext db = new RefillAndMiniCafeContext();
         string? PrintStr = "";
+        private DispatcherTimer timer;
+        private string currentTime;
         #region OBSERVABLE COLLECTION AND FEATURES
+        public static Product? product;
         public ObservableCollection<User> UsersObserv { get; set; }
         public  List<string> petrolTitle = new();
         private User? selectedUser;
+        private Sale Sale;
 
         public User SelectedUser
         {
@@ -51,6 +58,26 @@ namespace Refill_Entity.ViewModels
             set
             {
                 selectedProduct = value;
+                try
+                {
+                    if (productsObserv is not null)
+                    {
+                        product = SelectedProduct;
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                }
+                var DialogResult = OpenQuantityWindow();
+                if (DialogResult == true)
+                {
+                    Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
+                    MessageBox.Show($"{Sale.ProductName}, {Sale.Amount}, {Sale.Quantity}");
+                    saleproductsObserv!.Add(Sale);
+                }
+
                 OnPropertyChanged("SelectedProduct");
             }
         }
@@ -89,87 +116,160 @@ namespace Refill_Entity.ViewModels
             }
         }
         #endregion
-
-        #region REFILL SALE DATA
+        private int time;
+        #region REFILL SALE DATA FEATURES
 
         private string? pricePetrolBlock;
         private string? methodSale_RefillTextBox;
-        private string? petrolLiters = "0.00";
+        private string? petrolLiters;
         private string? totalPetrolPriceTB;
         private string? columnNumber;
         private string? selectSaleRefill_Content;
         private string? litersRB_Content = "Литры";
         private string? rublesRB_Content = "Рубли";
+        private string? totalCafePriceTB = "0";
+        private string? totalSale;
+        private string? sPetrolTitle;
+        public static double count;
+        public static decimal amount;
+        public static float total;
 
         public string PricePetrolBlock
         {
-            get => pricePetrolBlock ?? string.Empty;
+            get => pricePetrolBlock;
             set { pricePetrolBlock = value; OnPropertyChanged("PricePetrolBlock"); }
         }
-        public string MethodSaleRefillTextBox
+        public string MethodSale_RefillTextBox
         {
-            get => methodSale_RefillTextBox ?? string.Empty;
-            set { methodSale_RefillTextBox = value; OnPropertyChanged("MethodSaleRefillTextBox"); }
+            get => methodSale_RefillTextBox;
+            set { methodSale_RefillTextBox = value; OnPropertyChanged("MethodSale_RefillTextBox"); }
         }
 
         public string PetrolLiters
         {
-            get => petrolLiters ?? string.Empty;
+            get => petrolLiters;
             set { petrolLiters = value; OnPropertyChanged("PetrolLiters"); }
         }
 
         public string TotalPetrolPriceTB
         {
-            get => totalPetrolPriceTB ?? string.Empty;
-            set { totalPetrolPriceTB = value; OnPropertyChanged("TotalPetrolPriceRB"); }
+            get => totalPetrolPriceTB!;
+            set { totalPetrolPriceTB = value; OnPropertyChanged("TotalPetrolPriceTB"); }
         }
 
         public string ColumnNumber
         {
-            get => columnNumber ?? string.Empty;
+            get => columnNumber;
             set { columnNumber = value; OnPropertyChanged("ColumnNumber"); }
         }
 
         public string SelectSaleRefill_Content
         {
-            get => selectSaleRefill_Content ?? string.Empty;
+            get => selectSaleRefill_Content;
             set { selectSaleRefill_Content = value; OnPropertyChanged("SelectSaleRefill"); }
         }
 
         public string LitersRB_Comtent
         {
-            get => litersRB_Content ?? string.Empty;
+            get => litersRB_Content;
             set { litersRB_Content = value; OnPropertyChanged("LitersRB_Content"); }
         }
 
         public string RublesRB_Content
         {
-            get => rublesRB_Content ?? string.Empty;
+            get => rublesRB_Content;
             set {  rublesRB_Content = value;OnPropertyChanged("RublesRB_Content"); }
         }
 
+        public string TotalCafePriceTB
+        {
+            get => totalCafePriceTB;
+            set { totalCafePriceTB = value; OnPropertyChanged("TotalCafePriceTB"); }
+        }
+
+        public string TotalSale
+        {
+            get => totalSale;
+            set { totalSale = value; OnPropertyChanged("TotalSale"); }
+        }
+
+        public string SPetrolTitle
+        {
+            get => sPetrolTitle!;
+            set { sPetrolTitle = value; OnPropertyChanged("SPetrolTitle"); }
+        }
+
+        //public double Count
+        //{
+        //    get => count;
+        //    set { count = value; OnPropertyChanged("Count"); }
+        //}
+
+        //public decimal Amount
+        //{
+        //    get => amount;
+        //    set { amount = value; OnPropertyChanged("Amount"); }
+        //}
+
+        //public float Total
+        //{
+        //    get => total;
+        //    set { total = value; OnPropertyChanged("Total");}
+        //}
         #endregion
 
-
+        #region CURENT TIME FEATURES
+        public string CurentTime
+        {
+            get
+            {
+                return this.currentTime;
+            }
+            set { this.currentTime = value; OnPropertyChanged("CurrentTime"); }
+        }
+        #endregion
         public MainWindowViewModel()
         {
-            
+            //Первоначальная загрузка таблицы Products из базы данных
             db.Products.Load();
             productsObserv = db.Products.Local.ToObservableCollection();
 
+            //Первоначальная загрузка таблицы Users из базы данных
             db.Users.Load();
             UsersObserv = db.Users.Local.ToObservableCollection();
 
-
+            //Первоначальная инициализация ObservableCollection saleproductsObserv для сохранения продаваемых товаров
             saleproductsObserv = new ObservableCollection<Sale>();
 
-            
+            timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 1);
+            //реализация timer.Tick для MVVM ViewModel
+            timer.Tick += (sender, args) =>
+            {
+                time = Convert.ToInt32(PetrolLiters);
+                if (time > 0)
+                {
+                    time--;
+                    PetrolLiters = string.Format("{0}", time % 60);
+                }
+                else
+                {
+                    timer.Stop();
+                    MethodSale_RefillTextBox = "";
+                    TotalPetrolPriceTB = "0";
+                }
+            };
+            timer.Interval = new TimeSpan(0, 0, 1);
+
         }
+
         #region RADIOBUTTON REFILL
 
-
+        //выбор значения по умолчанию из enum SelectRefill
         SelectRefill selectRefill = SelectRefill.Litres;
-
+        /// <summary>
+        /// свойство для отслеживания выбора из enum SelectRefill
+        /// </summary>
         private SelectRefill SelectRefill
         { 
             get => selectRefill; 
@@ -183,19 +283,25 @@ namespace Refill_Entity.ViewModels
                 OnPropertyChanged("GetResult"); 
             } 
         }
-
+        /// <summary>
+        /// свойство для передачи значения при выборе RadioButton LitersRB
+        /// </summary>
         public bool LitersRB_Check
         {
             get { return SelectRefill == SelectRefill.Litres; }
             set { SelectRefill = value? SelectRefill.Litres: SelectRefill;}
         }
-
+        /// <summary>
+        /// свойство для передачи значения при выборе RadioButton RublesRB
+        /// </summary>
         public bool RublesRB_Check
         {
             get { return SelectRefill == SelectRefill.Rubles;}
             set { SelectRefill = value ? SelectRefill.Rubles : SelectRefill;}
         }
-
+        /// <summary>
+        /// свойство проверяющее какой переключатель выбран и передачи нужного значения при нужном переключателе
+        /// </summary>
         public string GetResult
         {
             get
@@ -213,41 +319,45 @@ namespace Refill_Entity.ViewModels
         #endregion
 
         #region THE FUNCTIONALITY OF BRINGING A CAFE WINDOW TO SERVE A NEW CUSTOMER
-        public void NewCafeBuyer(ref TextBlock textblock)
+        /// <summary>
+        /// Метод приведения полей Cafe к первоначальным значениям по умолчанию
+        /// </summary>
+        public void NewCafeBuyer()
         {
-            textblock.Text = "0";
-            if (saleproductsObserv is not null)
-            {
-                saleproductsObserv.Clear();
-            }
+            TotalCafePriceTB = "0";
+        }
+        public void NewPetrolBuyer()
+        {
+            TotalPetrolPriceTB = "0";
+            MethodSale_RefillTextBox = "0";
         }
         #endregion
 
-
         #region CANCELLATION OF THE PRODUCT IN saleDataGrid
-        public void saleGridDeleteProduct(ref DataGrid datagrid)
-        {
-            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
-            {
-                MessageBoxResult result = MessageBox.Show("Удалить всё кол-во товара - Yes", "Warning", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        var index = datagrid.SelectedIndex;
-                        datagrid.Items.RemoveAt(index);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
-            }
-            else if (PasswordWindow.valueStatus == 0)
-            {
-                MessageBox.Show("Товар может отменять только Старший Кассир или Администратор", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
+      
+        //public void saleGridDeleteProduct(ref DataGrid datagrid)
+        //{
+        //    if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+        //    {
+        //        MessageBoxResult result = MessageBox.Show("Удалить всё кол-во товара - Yes", "Warning", MessageBoxButton.YesNo);
+        //        if (result == MessageBoxResult.Yes)
+        //        {
+        //            try
+        //            {
+        //                var index = datagrid.SelectedIndex;
+        //                datagrid.Items.RemoveAt(index);
+        //            }
+        //            catch
+        //            {
+        //                MessageBox.Show("ВЫДЕЛИТЕ ТОВАР ДЛЯ ОТМЕНЫ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //            }
+        //        }
+        //    }
+        //    else if (PasswordWindow.valueStatus == 0)
+        //    {
+        //        MessageBox.Show("Товар может отменять только Старший Кассир или Администратор", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    }
+        //}
 
         #endregion
 
@@ -315,6 +425,9 @@ namespace Refill_Entity.ViewModels
         #endregion
 
         #region METHOD SHUTDOWN PC 
+        /// <summary>
+        /// метод выключения компьютера после завершения работы заправки, если заправка работает не круглосуточно либо нужно по какой-то причине выключить рабочее место кассира
+        /// </summary>
         private void ShutdownPsMethod()
         {
             if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
@@ -329,7 +442,12 @@ namespace Refill_Entity.ViewModels
         #endregion
 
         #region COMMAND SHUTDOWN PС
+
+
         private RelayCommand shutdownPs;
+        /// <summary>
+        /// команда выключения компьютера после завершения работы заправки передаваемая на клавишу "Завершение работы системы" через XAML Binding
+        /// </summary>
         public RelayCommand ShutdownPs
         {
             get
@@ -343,7 +461,7 @@ namespace Refill_Entity.ViewModels
         #endregion
 
         #region METHODS TO OPEN WINDOWS
-        //Методы открытия окон
+        //Методы открытия вспомогательных окон
         private void OpenServiceWindowMethod()
         {
             if (PasswordWindow.valueStatus == 2)
@@ -369,6 +487,13 @@ namespace Refill_Entity.ViewModels
             SetParametersWindow(newPasswordWindow);
             
         }
+
+        private bool? OpenQuantityWindow()
+        {
+            QuantityWindow quantityWindow = new QuantityWindow();
+            SetParametersWindow(quantityWindow);
+            return quantityWindow.DialogResult;
+        }
         //параметры устанавливаемые для открывающихся окон
         private void SetParametersWindow(Window window)
         {
@@ -376,9 +501,11 @@ namespace Refill_Entity.ViewModels
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();
         }
+
         #endregion
 
         #region COMMANDS TO OPEN WINDOWS
+        //Команды открытия вспомогательных окон передаваемые далее в главное окно через XAML Biding
         private RelayCommand openDayReportSaleWnd;
         public RelayCommand OpenDayReportSaleWnd
         {
@@ -418,7 +545,11 @@ namespace Refill_Entity.ViewModels
         #endregion
 
         #region METHOD CHECK AND PRINTING
-        private void Print()
+
+        /// <summary>
+        /// Метод для клавиши Печать чека. Метод формирует строку для печати и сохраняет продажи из saleproductsObserv в базу данных
+        /// </summary>
+        private void PrintAndSaveSale()
         {                
             PrintStr += "--------------------------------------------\n";
             PrintStr += "Заправочный комплекс Лукойл \n";
@@ -447,8 +578,21 @@ namespace Refill_Entity.ViewModels
             {
                 PrintStr = "";
             }
+            db.Sales.UpdateRange(saleproductsObserv);
+            db.SaveChanges();
+            NewCafeBuyer();
+            NewPetrolBuyer();
+            TotalSale = "";
+            total = 0;
+            if (saleproductsObserv is not null)
+            {
+                saleproductsObserv.Clear();
+            }
         }
-
+        /// <summary>
+        /// Метод создания фиксированного документа, такого как чек
+        /// </summary>
+        /// <returns>fixedDocument</returns>
         private FixedDocument CreateFixedDocument()
         {
             FixedDocument fixedDocument = new FixedDocument();
@@ -470,7 +614,11 @@ namespace Refill_Entity.ViewModels
 
         #endregion
 
-            #region COMMANDA CHECK
+        #region COMMANDA CHECK
+
+        /// <summary>
+        /// Команда передаваемая на клавишу Печать чека
+        /// </summary>
         private RelayCommand printCommand;
         public RelayCommand PrintCommand
         {
@@ -478,11 +626,117 @@ namespace Refill_Entity.ViewModels
             {
                 return printCommand ?? new RelayCommand(obj => 
                 {
-                    Print();
+                    PrintAndSaveSale();
                 });
             }
         }
 
+        #endregion
+
+        #region METHOD REFILL PAYMENT
+
+        /// <summary>
+        /// Метод для клавиши Оплата заправка
+        /// </summary>
+        private void RefillPayment_Method()
+        {
+            if (GetResult == "Литры")
+            {
+                try
+                {
+                    float result = float.Parse(PricePetrolBlock) * float.Parse(MethodSale_RefillTextBox);
+                    
+                    PetrolLiters = MethodSale_RefillTextBox;
+                    TotalPetrolPriceTB = result.ToString();
+                    MessageBox.Show($"{TotalPetrolPriceTB}");
+                    Sale = new() { ProductName = SPetrolTitle, Amount = decimal.Parse(TotalPetrolPriceTB), Quantity = double.Parse(MethodSale_RefillTextBox), NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
+
+                    timer.Start();
+
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    //MessageBox.Show("ВВедите количество литров");
+                }
+            }
+            else if(GetResult == "Рубли")
+            {
+                TotalPetrolPriceTB = MethodSale_RefillTextBox;
+                double litersD = Convert.ToDouble(MethodSale_RefillTextBox) / Convert.ToDouble(PricePetrolBlock);
+                litersD = Math.Round(litersD);
+                PetrolLiters = litersD.ToString();
+                Sale = new() { ProductName = SPetrolTitle, Amount = decimal.Parse(TotalPetrolPriceTB), Quantity = litersD, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
+                timer.Start();
+            }
+            saleproductsObserv!.Add(Sale);
+            total += float.Parse(TotalPetrolPriceTB);
+            TotalSale = total.ToString();
+        }
+        #endregion
+
+        #region COMMAND REFILL PAYMENT
+        private RelayCommand refillPayment_Command;
+
+        /// <summary>
+        /// Команда передающая метод RefillPayment_Method для клавиши Оплата заправка 
+        /// </summary>
+        public RelayCommand RefillPayment_Command
+        {
+            get
+            {
+                return refillPayment_Command ?? new RelayCommand(obj =>
+                {
+                    RefillPayment_Method();
+                });
+            }
+        }
+        #endregion
+
+        #region METHOD CAFE PAYMENT
+
+        /// <summary>
+        /// Метод для клавиши Оплата кафе
+        /// </summary>
+        private void CafePayment_Method()
+        {
+            decimal Sum = 0;
+            if (productsObserv is not null)
+            {
+                db.Products.UpdateRange(productsObserv);
+                db.SaveChanges();
+            }
+
+            if (saleproductsObserv is not null)
+            {
+                foreach (Product product in db.Products)
+                {
+                    var result = saleproductsObserv.Where(w => w.ProductName == product.title).Select(s => s.Amount);
+                    Sum += result.Sum();
+                    TotalCafePriceTB = Sum.ToString("#####.##");
+                }
+            }
+            total += float.Parse(TotalCafePriceTB);
+            TotalSale= total.ToString("#####.##");
+        }
+        #endregion
+
+        #region COMMAND CAFE PAYMENT
+        private RelayCommand cafePayment_Command;
+
+        /// <summary>
+        /// Команда передающая метод CafePayment_Method для клавиши Оплата кафе
+        /// </summary>
+        public RelayCommand CafePayment_Command
+        {
+            get
+            {
+                return cafePayment_Command ?? new RelayCommand(obj =>
+                {
+                    CafePayment_Method();
+                });
+            }
+        }
         #endregion
     }
 }

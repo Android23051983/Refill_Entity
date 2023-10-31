@@ -11,11 +11,6 @@
   <ItemGroup>
     <None Remove="Luk.png" />
     <None Remove="Refill1.png" />
-    <None Remove="Refill2.png" />
-    <None Remove="Refill3.png" />
-    <None Remove="Refill4.png" />
-    <None Remove="Refill5.png" />
-    <None Remove="Refill6.png" />
     <None Remove="Заправка.jpg" />
   </ItemGroup>
 
@@ -30,11 +25,6 @@
   <ItemGroup>
     <Resource Include="Luk.png" />
     <Resource Include="Refill1.png" />
-    <Resource Include="Refill2.png" />
-    <Resource Include="Refill3.png" />
-    <Resource Include="Refill4.png" />
-    <Resource Include="Refill5.png" />
-    <Resource Include="Refill6.png" />
     <Resource Include="Заправка.jpg" />
   </ItemGroup>
 

@@ -21,35 +21,34 @@ namespace Refill_Entity.Views
     /// </summary>
     public partial class QuantityWindow : Window
     {
-        public MainWindowViewModel ViewModel { get; set; }
 
         public QuantityWindow()
         {
             InitializeComponent();
-            ViewModel = new MainWindowViewModel();
-            DataContext = ViewModel;
+           
         }
 
         private void QWButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                MainWindow.count = Convert.ToInt32(quantityTextBox.Text);
-                if (MainWindow.product.ProductCount >= MainWindow.count)
+                MainWindowViewModel.count = Convert.ToInt32(quantityTextBox.Text);
+                if (MainWindowViewModel.product!.ProductCount >= MainWindowViewModel.count)
                 {
-                    MainWindow.amount = (decimal)MainWindow.count * MainWindow.product.price;
-                    MainWindow.product.ProductCount -= Convert.ToInt32(quantityTextBox.Text);
+                    MainWindowViewModel.amount = (decimal)MainWindowViewModel.count * MainWindowViewModel.product.price;
+                    MainWindowViewModel.product.ProductCount -= Convert.ToInt32(quantityTextBox.Text);
 
-                    this.DialogResult = true;
+                    DialogResult = true;
                 }
                 else
                 {
-                    this.DialogResult = false;
+                    DialogResult = false;
                     MessageBox.Show("Не хватает количества товара на складе", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
-            catch (Exception)
+            catch (Exception x)
             {
+                MessageBox.Show(x.Message);
                 MessageBox.Show("Введите количество товара", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }

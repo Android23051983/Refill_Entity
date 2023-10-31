@@ -36,10 +36,6 @@ namespace Refill_Entity
            
         }
 
-       
-            //
-       
-
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             using (RefillAndMiniCafeContext db = new RefillAndMiniCafeContext())

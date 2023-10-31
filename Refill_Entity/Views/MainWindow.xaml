@@ -106,8 +106,8 @@
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -131,37 +131,17 @@
                         <Image Source="/Refill1.png" />
                     </Button>
 
-                    <Button x:Name="ColumnNamber_2" Width="80" Height="80" Margin="10,5,10,5" Click="Column2Btn_Click">
-                        <Image Source="/Refill2.png" />
-                    </Button>
-
-                    <Button x:Name="ColumnNamber_3" Width="80" Height="80" Margin="10,5,10,5" Click="Column3Btn_Click">
-                        <Image Source="/Refill3.png" />
-                    </Button>
-
-                    <Button x:Name="ColumnNamber_4" Width="80" Height="80" Margin="10,5,10,5" Click="Column4Btn_Click">
-                        <Image Source="/Refill4.png" />
-                    </Button>
-
-                    <Button x:Name="ColumnNamber_5" Width="80" Height="80" Margin="10,5,10,5" Click="Column5Btn_Click">
-                        <Image Source="/Refill5.png" />
-                    </Button>
-
-                    <Button x:Name="ColumnNamber_6" Width="80" Height="80" Margin="10,5,10,5" Click="Column6Btn_Click">
-                        <Image Source="/Refill6.png" />
-                    </Button>
-
                 </StackPanel>
 
                 <StackPanel Grid.Row="1">
                     <Label x:Name="columnNumber" Content="ColumnNumber1" FontSize="30" FontWeight="SemiBold" Margin="0,5,0,5"/>
                     <Label Content="Заправляется Топливо марки" FontSize="30" FontWeight="SemiBold"/>
-                    <ComboBox x:Name="petrolBox" Width="255" Height="30" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="18" FontWeight="SemiBold" Background="FloralWhite" SelectionChanged="petrolBox_SelectionChanged"/>
+                    <ComboBox x:Name="petrolBox" Width="255" Height="30" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="18" FontWeight="SemiBold" Background="FloralWhite" SelectionChanged="petrolBox_SelectionChanged" SelectedItem="{Binding SPetrolTitle}"/>
                     <Label Content="Цена топлива" FontSize="30" FontWeight="SemiBold" Margin="0,10,0,0"/>
                     <StackPanel Orientation="Horizontal">
 
                         <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Width="100" HorizontalAlignment="Left">
-                            <TextBlock x:Name="pricePetrolBlock" Background="FloralWhite"/>
+                            <TextBlock x:Name="pricePetrolBlock" Text="{Binding PricePetrolBlock, Mode=TwoWay}" Background="FloralWhite"/>
                         </Border>
                         <TextBlock Text="рублей" Foreground="Black" FlowDirection="LeftToRight"/>
                     </StackPanel>
@@ -186,19 +166,21 @@
                         </StackPanel>
 
                         <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Width="250" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBox x:Name="methodSale_RefillTextBox" Width="240" Height="90" FontSize="75" FontWeight="Bold" VerticalContentAlignment="Center" Background="FloralWhite" />
+                            <TextBox x:Name="methodSale_RefillTextBox" Text="{Binding MethodSale_RefillTextBox, Mode=TwoWay}" Width="240" Height="90" FontSize="75" FontWeight="Bold" VerticalContentAlignment="Center" Background="FloralWhite" />
                         </Border>
                     </StackPanel>
                 </Grid>
 
                 <Border VerticalAlignment="Bottom" Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
                     <Grid Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Label Content="Заправка топлива" FontSize="30" FontWeight="Bold" VerticalAlignment="Top"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Label x:Name="petrolLiters" Content="{Binding PetrolLiters, Mode=TwoWay}" FontSize="100" FontWeight="Bold" Padding="270,0,0,0" HorizontalAlignment="Right"/>
-                                <Label Content="литров" FontSize="50" VerticalAlignment="Bottom"/>
-                            </StackPanel>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                            <Label Content="Заправка топлива" FontSize="30" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                                <Label x:Name="petrolLiters" Content="{Binding PetrolLiters, Mode=TwoWay}" FontSize="100" FontWeight="Bold" Padding="270,0,0,0" HorizontalAlignment="Right" Margin="10"/>
+                            <Label Content="литров" FontSize="50" VerticalAlignment="Bottom"/>
                         </StackPanel>
 
                     </Grid>
@@ -220,7 +202,7 @@
 
                 <Label Content="Меню" FontSize="30" FontWeight="Bold" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <DataGrid x:Name="menuDataGrid" ItemsSource="{Binding productsObserv, Mode=TwoWay}" SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" SelectionChanged="menuDataGrid_SelectionChanged" >
+                <DataGrid x:Name="menuDataGrid" ItemsSource="{Binding productsObserv, Mode=TwoWay}" SelectedItem="{Binding SelectedProduct}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" AutoGenerateColumns="False" Grid.Row="1" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Наименование" Binding="{Binding Path = Title, Mode=TwoWay}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Цена" Binding="{Binding Path = Price, Mode=TwoWay}" Width="120" IsReadOnly="True"/>
@@ -230,10 +212,10 @@
 
                 <StackPanel Grid.Row="2">
 
-                    <Label Content="Подобранные товары"  FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <Label Content="Подобранные товары для продажи"  FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </StackPanel>
 
-                <DataGrid x:Name="saleDataGrid" ItemsSource="{Binding saleproductsObserv}" SelectedItem="{Binding SaleSelectedProduct}" IsSynchronizedWithCurrentItem="True" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
+                <DataGrid x:Name="saleDataGrid" ItemsSource="{Binding saleproductsObserv, Mode=TwoWay}" SelectedItem="{Binding SaleSelectedProduct, Mode=TwoWay}" IsSynchronizedWithCurrentItem="True" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Visible" FontSize="20" AutoGenerateColumns="False">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Наименование Товара" Binding="{Binding Path= ProductName, Mode=TwoWay}"/>
@@ -247,18 +229,18 @@
                 </DataGrid>
 
                 <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Style="{DynamicResource MyButtonStyle}" Content="Отменить товар" FontSize="20" Click="saleDelBtn_Click"/>
+                    <Button Style="{DynamicResource MyButtonStyle}" Content="Отменить товар" FontSize="20" />
                 </StackPanel>
 
             </Grid>
         </GroupBox>
         
         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА ЗАПРАВКА" FontSize="20" FontWeight="Bold" Height="50" Width="200" Click="RefillPaymentBtn_Click"/>
+            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА ЗАПРАВКА" FontSize="20" FontWeight="Bold" Height="50" Width="200" Command="{Binding RefillPayment_Command}"/>
         </StackPanel>
         
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА КАФЕ" FontSize="20" FontWeight="Bold" Height="50" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CafePaymentBtn_Click"/>
+            <Button Style="{DynamicResource MyButtonStyle}" Content="ОПЛАТА КАФЕ" FontSize="20" FontWeight="Bold" Height="50" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding CafePayment_Command}"/>
         </StackPanel>
         
         
@@ -267,7 +249,7 @@
             <Label Content="Итого за бензин" />
 
             <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5"  Width="100">
-                <TextBlock x:Name="totalPetrolPriceTB" Text="0" Background="FloralWhite"/>
+                <TextBlock x:Name="totalPetrolPriceTB" Text="{Binding TotalPetrolPriceTB, Mode=TwoWay}" Background="FloralWhite"/>
             </Border>
             <TextBlock Text="рублей" Foreground="Black" VerticalAlignment="Bottom"/>
 
@@ -277,7 +259,7 @@
             <Label Content="Итого за кафе" />
 
             <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Width="100">
-                <TextBlock x:Name="cafeTxt" Text="0" Background="FloralWhite" />
+                <TextBlock x:Name="totalCafePriceTB" Text="{Binding TotalCafePriceTB}" Background="FloralWhite" />
             </Border>
             <TextBlock Text="рублей" Foreground="Black" VerticalAlignment="Bottom"/>
         </StackPanel>
@@ -288,7 +270,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="T" Grid.Column="0" Width="Auto" />
+                <TextBlock x:Name="TotalSale" Grid.Column="0" FontSize="50" Width="Auto" HorizontalAlignment="Left" Text="{Binding TotalSale, Mode=TwoWay}"/>
                 <Button Style="{DynamicResource MyButtonStyle}" Grid.Column="1" Content="ПЕЧАТЬ ЧЕКА" FontWeight="Bold" FontSize="14" Width="150" Height="65" Margin="2" Command="{Binding PrintCommand}"/>
             </Grid>
         </GroupBox>
