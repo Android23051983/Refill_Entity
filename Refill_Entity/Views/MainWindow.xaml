@@ -229,7 +229,7 @@
                 </DataGrid>
 
                 <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Style="{DynamicResource MyButtonStyle}" Content="Отменить товар" FontSize="20" />
+                    <Button Style="{DynamicResource MyButtonStyle}" Content="Отменить товар" FontSize="20" Command="{Binding CancellationProduct_Command}"/>
                 </StackPanel>
 
             </Grid>

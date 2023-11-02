@@ -75,17 +75,26 @@ namespace Refill_Entity
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+            if (ViewModel.saleproductsObserv.Count() > 0)
             {
-                this.Close();
+                MessageBox.Show("Выход невозможен. Завершите или отмените продажу", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            else if (PasswordWindow.valueStatus != 1 || PasswordWindow.valueStatus != 2)
+            else if (ViewModel.saleproductsObserv.Count() == 0)
             {
-                MessageBox.Show("Для Выхода смените Кассира на Старшего Кассира или Администратора", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+                {
+                    this.Close();
+                }
+                else if (PasswordWindow.valueStatus != 1 || PasswordWindow.valueStatus != 2)
+                {
+                    MessageBox.Show("Для Выхода смените Кассира на Старшего Кассира или Администратора", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
+
         }
         /// <summary>
-        /// Нажатие клавиши колонки. Сделано для примера как можно сделать для нескольких колонок, функционал которых здесь не риализован.
+        /// Нажатие клавиши колонки. Сделано для примера как можно сделать для нескольких колонок, функционал которых здесь не реализован.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

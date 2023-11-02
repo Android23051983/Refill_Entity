@@ -31,8 +31,10 @@ namespace Refill_Entity.ViewModels
         string? PrintStr = "";
         private DispatcherTimer timer;
         private string currentTime;
+        private int time;
         #region OBSERVABLE COLLECTION AND FEATURES
         public static Product? product;
+        public static Refill? refill;       
         public ObservableCollection<User> UsersObserv { get; set; }
         public  List<string> petrolTitle = new();
         private User? selectedUser;
@@ -71,10 +73,11 @@ namespace Refill_Entity.ViewModels
 
                 }
                 var DialogResult = OpenQuantityWindow();
+                db.Products.UpdateRange(productsObserv);
+                db.SaveChanges();
                 if (DialogResult == true)
                 {
                     Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
-                    MessageBox.Show($"{Sale.ProductName}, {Sale.Amount}, {Sale.Quantity}");
                     saleproductsObserv!.Add(Sale);
                 }
 
@@ -82,7 +85,7 @@ namespace Refill_Entity.ViewModels
             }
         }
 
-        public ObservableCollection<Refill> refillproductsObserv;
+        public ObservableCollection<Refill> refillProductsObserv;
 
         private Refill? refillselectedProduct;
 
@@ -116,7 +119,6 @@ namespace Refill_Entity.ViewModels
             }
         }
         #endregion
-        private int time;
         #region REFILL SALE DATA FEATURES
 
         private string? pricePetrolBlock;
@@ -237,6 +239,9 @@ namespace Refill_Entity.ViewModels
             //Первоначальная загрузка таблицы Users из базы данных
             db.Users.Load();
             UsersObserv = db.Users.Local.ToObservableCollection();
+
+            db.Refills.Load();
+            refillProductsObserv = db.Refills.Local.ToObservableCollection();
 
             //Первоначальная инициализация ObservableCollection saleproductsObserv для сохранения продаваемых товаров
             saleproductsObserv = new ObservableCollection<Sale>();
@@ -375,29 +380,24 @@ namespace Refill_Entity.ViewModels
 
         public void PetrolSelection(ref ComboBox combobox, ref TextBlock textblock)
         {
-            using (RefillAndMiniCafeContext db = new())
+            foreach (var petrol in refillProductsObserv)
             {
-                var result = db.Refills.ToList();
-                foreach (var petrol in result)
+                if (petrol.Title == combobox.SelectedItem.ToString())
                 {
-                    if (petrol.Title == combobox.SelectedItem.ToString())
-                    {
-                        textblock.Text = petrol.Price.ToString("#.##");
-                    }
-
+                    textblock.Text = petrol.Price.ToString("#.##");
                 }
+
             }
+           
         }
         public void PetrolLoaded(ref ComboBox combobox)
         {
-            using (RefillAndMiniCafeContext db = new())
+
+            foreach (var petrol in refillProductsObserv)
             {
-                var result = db.Refills.ToList();
-                foreach (var petrol in result)
-                {
-                    petrolTitle.Add(petrol.Title);
-                }
+                petrolTitle.Add(petrol.Title);
             }
+            
             foreach (var petrol in petrolTitle)
             {
                 combobox.Items.Add(petrol);
@@ -640,6 +640,7 @@ namespace Refill_Entity.ViewModels
         /// </summary>
         private void RefillPayment_Method()
         {
+            
             if (GetResult == "Литры")
             {
                 try
@@ -648,9 +649,11 @@ namespace Refill_Entity.ViewModels
                     
                     PetrolLiters = MethodSale_RefillTextBox;
                     TotalPetrolPriceTB = result.ToString();
-                    MessageBox.Show($"{TotalPetrolPriceTB}");
                     Sale = new() { ProductName = SPetrolTitle, Amount = decimal.Parse(TotalPetrolPriceTB), Quantity = double.Parse(MethodSale_RefillTextBox), NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
-
+                    var refill = refillProductsObserv.Where(x=> x.Title == Sale.ProductName).First();
+                    refill.ProductCount = refill.ProductCount - double.Parse(MethodSale_RefillTextBox);
+                    db.Refills.Update(refill);
+                    db.SaveChanges();
                     timer.Start();
 
                 }
@@ -667,11 +670,20 @@ namespace Refill_Entity.ViewModels
                 litersD = Math.Round(litersD);
                 PetrolLiters = litersD.ToString();
                 Sale = new() { ProductName = SPetrolTitle, Amount = decimal.Parse(TotalPetrolPriceTB), Quantity = litersD, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
+                var refill = refillProductsObserv.Where(x => x.Title == Sale.ProductName).First();
+                refill.ProductCount = refill.ProductCount - litersD;
+                db.Refills.Update(refill);
+                db.SaveChanges();
                 timer.Start();
             }
+            var productCount = db.Refills.Where(x => x.Title == SPetrolTitle).Select(x => x.ProductCount);
             saleproductsObserv!.Add(Sale);
             total += float.Parse(TotalPetrolPriceTB);
             TotalSale = total.ToString();
+            foreach (var product in productCount)
+            {
+                MessageBox.Show($"{SPetrolTitle} осталось {product.ToString()} литров", "Остаток бензина на заправке");
+            }
         }
         #endregion
 
@@ -737,6 +749,71 @@ namespace Refill_Entity.ViewModels
                 });
             }
         }
+        #endregion
+
+        #region METHODS CANCELLATION OF THE PRODUCT AND CANCELLATION OF THE SALE
+        private void CancellationProduct_Method()
+        {
+            foreach (var item in refillProductsObserv)
+            {
+
+
+                if (SaleSelectedProduct is not null)
+                {
+                    Sale = SaleSelectedProduct;
+                    if (Sale.ProductName != item.Title)
+                    {
+                        product = productsObserv!.First(x => x.Title == Sale.ProductName);
+                        product.ProductCount = product.ProductCount + Sale.Quantity;
+                        saleproductsObserv.Remove(Sale);
+                        db.Products.UpdateRange(productsObserv!);
+                        db.SaveChanges();
+                    }
+                    else if (Sale.ProductName == item.Title)
+                    {
+                        refill = refillProductsObserv.First(x => x.Title == Sale.ProductName);
+                        refill.ProductCount = refill.ProductCount + Sale.Quantity;
+                        saleproductsObserv.Remove(Sale);
+                        db.Refills.UpdateRange(refillProductsObserv);
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private void CancellationSale_Method()
+        {
+
+        }
+
+        #endregion
+
+        #region COMMAND CANCELLATION OF THE PRODUCT AND CANCELLATION OF THE SALE
+        private RelayCommand cancellationProduct_Command;
+        public RelayCommand CancellationProduct_Command
+        {
+            get
+            {
+                return cancellationProduct_Command ?? new RelayCommand(obj =>
+                {
+                    CancellationProduct_Method();
+                });
+            }
+        }
+
+        private RelayCommand cancellationSale_Command;
+        public RelayCommand CancellationSale_Command
+        {
+            get
+            {
+                return cancellationSale_Command ?? new RelayCommand(obj =>
+                { 
+                    CancellationSale_Method();
+                });
+            }
+        }
+
+
         #endregion
     }
 }

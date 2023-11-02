@@ -21,7 +21,7 @@ namespace Refill_Entity.Views
     /// </summary>
     public partial class QuantityWindow : Window
     {
-
+        RefillAndMiniCafeContext db = new RefillAndMiniCafeContext();
         public QuantityWindow()
         {
             InitializeComponent();
