@@ -79,6 +79,8 @@ namespace Refill_Entity.ViewModels
                 {
                     Sale = new() { ProductName = product!.Title, Amount = amount, Quantity = count, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
                     saleproductsObserv!.Add(Sale);
+                    total += (float)Sale.Amount;
+                    TotalSale = total.ToString();
                 }
 
                 OnPropertyChanged("SelectedProduct");
@@ -124,7 +126,7 @@ namespace Refill_Entity.ViewModels
         private string? pricePetrolBlock;
         private string? methodSale_RefillTextBox;
         private string? petrolLiters;
-        private string? totalPetrolPriceTB;
+        private string? totalPetrolPriceTB = "0";
         private string? columnNumber;
         private string? selectSaleRefill_Content;
         private string? litersRB_Content = "Литры";
@@ -200,24 +202,6 @@ namespace Refill_Entity.ViewModels
             get => sPetrolTitle!;
             set { sPetrolTitle = value; OnPropertyChanged("SPetrolTitle"); }
         }
-
-        //public double Count
-        //{
-        //    get => count;
-        //    set { count = value; OnPropertyChanged("Count"); }
-        //}
-
-        //public decimal Amount
-        //{
-        //    get => amount;
-        //    set { amount = value; OnPropertyChanged("Amount"); }
-        //}
-
-        //public float Total
-        //{
-        //    get => total;
-        //    set { total = value; OnPropertyChanged("Total");}
-        //}
         #endregion
 
         #region CURENT TIME FEATURES
@@ -762,30 +746,39 @@ namespace Refill_Entity.ViewModels
         #region METHODS CANCELLATION OF THE PRODUCT AND CANCELLATION OF THE SALE
         private void CancellationProduct_Method()
         {
-            foreach (var item in refillProductsObserv)
+            try
             {
-
-
-                if (SaleSelectedProduct is not null)
+                Sale = SaleSelectedProduct;
+                foreach (var item in refillProductsObserv)
                 {
-                    Sale = SaleSelectedProduct;
-                    if (Sale.ProductName != item.Title)
+                    if (SaleSelectedProduct is not null)
                     {
-                        product = productsObserv!.First(x => x.Title == Sale.ProductName);
-                        product.ProductCount = product.ProductCount + Sale.Quantity;
-                        saleproductsObserv.Remove(Sale);
-                        db.Products.UpdateRange(productsObserv!);
-                        db.SaveChanges();
-                    }
-                    else if (Sale.ProductName == item.Title)
-                    {
-                        refill = refillProductsObserv.First(x => x.Title == Sale.ProductName);
-                        refill.ProductCount = refill.ProductCount + Sale.Quantity;
-                        saleproductsObserv.Remove(Sale);
-                        db.Refills.UpdateRange(refillProductsObserv);
-                        db.SaveChanges();
+                        if (Sale.ProductName == item.Title)
+                        {
+                            refill = refillProductsObserv.First(x => x.Title == Sale.ProductName);
+                            refill.ProductCount = refill.ProductCount + Sale.Quantity;
+                            total -= (float)Sale.Amount;
+                            TotalSale = total.ToString();
+                            saleproductsObserv.Remove(Sale);
+                            db.Refills.UpdateRange(refillProductsObserv);
+                            db.SaveChanges();
+                        }
+                        else if (Sale.ProductName != item.Title)
+                        {
+                            product = productsObserv!.First(x => x.Title == Sale.ProductName);
+                            product.ProductCount = product.ProductCount + Sale.Quantity;
+                            total -= (float)Sale.Amount;
+                            TotalSale = total.ToString();
+                            saleproductsObserv.Remove(Sale);
+                            db.Products.UpdateRange(productsObserv!);
+                            db.SaveChanges();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
 
