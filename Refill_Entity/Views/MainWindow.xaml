@@ -279,9 +279,6 @@
             <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Command="{Binding OpenServiceWind}" >
                 <TextBlock Text="Сервисное обслуживание F10" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Button>
-            <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" Click="CancelBtn_Click">
-                <TextBlock Text="Отмена продажи F9" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
-            </Button>
             <Button Style="{DynamicResource MyButtonStyle}"  HorizontalAlignment="Left" FontSize="14" Width="150" Height="65" Margin="5,0,0,0" >
                 <TextBlock Text="Чат техподдержки F1" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
             </Button>

@@ -152,7 +152,7 @@ namespace Refill_Entity
             CountPeriodSaleProduct.Text = "";
             CountSaleProduct.Text = "";
             db.Sales.Load();
-            var value = db.Sales.Where(s => s.NameUsers == ReportUserCB.SelectedItem.ToString());
+            var value = db.Sales.Where(s => s.NameUsers == ReportUserCB.SelectedItem.ToString() && s.Date >= startDateCashier.SelectedDate && s.Date <= endDateCashier.SelectedDate);
             var countSum = value.Sum(s => s.Quantity);
             var sum = value.Sum(s => s.Amount);
             foreach (var item in value)

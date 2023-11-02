@@ -318,7 +318,7 @@ namespace Refill_Entity.ViewModels
         public void NewPetrolBuyer()
         {
             TotalPetrolPriceTB = "0";
-            MethodSale_RefillTextBox = "0";
+            MethodSale_RefillTextBox = "";
         }
         #endregion
 
@@ -720,8 +720,6 @@ namespace Refill_Entity.ViewModels
                     TotalCafePriceTB = Sum.ToString("#####.##");
                 }
             }
-            total += float.Parse(TotalCafePriceTB);
-            TotalSale= total.ToString("#####.##");
         }
         #endregion
 
@@ -782,10 +780,7 @@ namespace Refill_Entity.ViewModels
             }
         }
 
-        private void CancellationSale_Method()
-        {
-
-        }
+       
 
         #endregion
 
@@ -802,17 +797,7 @@ namespace Refill_Entity.ViewModels
             }
         }
 
-        private RelayCommand cancellationSale_Command;
-        public RelayCommand CancellationSale_Command
-        {
-            get
-            {
-                return cancellationSale_Command ?? new RelayCommand(obj =>
-                { 
-                    CancellationSale_Method();
-                });
-            }
-        }
+  
 
 
         #endregion
