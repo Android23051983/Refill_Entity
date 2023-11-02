@@ -430,13 +430,21 @@ namespace Refill_Entity.ViewModels
         /// </summary>
         private void ShutdownPsMethod()
         {
-            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+
+            if (saleproductsObserv.Count() > 0)
             {
-                System.Diagnostics.Process.Start("cmd", "/c shutdown -s -f -t 00");
+                MessageBox.Show("Завершение работы компьютера невозможно. Завершите продажу или отмените товары", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            else if (PasswordWindow.valueStatus == 0)
+            else if (saleproductsObserv.Count() == 0)
             {
-                MessageBox.Show("Завершать программу разрешено Старшему Кассиру или Администратору", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
+                {
+                    System.Diagnostics.Process.Start("cmd", "/c shutdown -s -f -t 00");
+                }
+                else if (PasswordWindow.valueStatus == 0)
+                {
+                    MessageBox.Show("Завершать программу разрешено Старшему Кассиру или Администратору", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
         #endregion

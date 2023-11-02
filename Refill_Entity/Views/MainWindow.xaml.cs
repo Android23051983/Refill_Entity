@@ -77,7 +77,7 @@ namespace Refill_Entity
         {
             if (ViewModel.saleproductsObserv.Count() > 0)
             {
-                MessageBox.Show("Выход невозможен. Завершите или отмените продажу", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Выход невозможен. Завершите продажу или отмените товары", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else if (ViewModel.saleproductsObserv.Count() == 0)
             {
