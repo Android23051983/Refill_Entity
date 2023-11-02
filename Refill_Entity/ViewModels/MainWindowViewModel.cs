@@ -648,16 +648,27 @@ namespace Refill_Entity.ViewModels
                 try
                 {
                     float result = float.Parse(PricePetrolBlock) * float.Parse(MethodSale_RefillTextBox);
-                    
                     PetrolLiters = MethodSale_RefillTextBox;
                     TotalPetrolPriceTB = result.ToString();
                     Sale = new() { ProductName = SPetrolTitle, Amount = decimal.Parse(TotalPetrolPriceTB), Quantity = double.Parse(MethodSale_RefillTextBox), NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
                     var refill = refillProductsObserv.Where(x=> x.Title == Sale.ProductName).First();
-                    refill.ProductCount = refill.ProductCount - double.Parse(MethodSale_RefillTextBox);
-                    db.Refills.Update(refill);
-                    db.SaveChanges();
-                    timer.Start();
-
+                    if (refill.ProductCount >= Sale.Quantity)
+                    {
+                        refill.ProductCount = refill.ProductCount - double.Parse(MethodSale_RefillTextBox);
+                        db.Refills.Update(refill);
+                        db.SaveChanges();
+                        timer.Start();
+                        saleproductsObserv!.Add(Sale);
+                        total += float.Parse(TotalPetrolPriceTB);
+                        TotalSale = total.ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не хватает количества бензина", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        PetrolLiters = "";
+                        MethodSale_RefillTextBox = "";
+                        TotalPetrolPriceTB = "0";
+                    }
                 }
                 catch(Exception e)
                 {
@@ -673,15 +684,27 @@ namespace Refill_Entity.ViewModels
                 PetrolLiters = litersD.ToString();
                 Sale = new() { ProductName = SPetrolTitle, Amount = decimal.Parse(TotalPetrolPriceTB), Quantity = litersD, NameUsers = PasswordWindow.userName!, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay };
                 var refill = refillProductsObserv.Where(x => x.Title == Sale.ProductName).First();
-                refill.ProductCount = refill.ProductCount - litersD;
-                db.Refills.Update(refill);
-                db.SaveChanges();
-                timer.Start();
+                if (refill.ProductCount >= Sale.Quantity)
+                {
+
+
+                    refill.ProductCount = refill.ProductCount - litersD;
+                    db.Refills.Update(refill);
+                    db.SaveChanges();
+                    timer.Start();
+                    saleproductsObserv!.Add(Sale);
+                    total += float.Parse(TotalPetrolPriceTB);
+                    TotalSale = total.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Не хватает количества бензина", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    PetrolLiters = "";
+                    TotalPetrolPriceTB = "0";
+                }
             }
             var productCount = db.Refills.Where(x => x.Title == SPetrolTitle).Select(x => x.ProductCount);
-            saleproductsObserv!.Add(Sale);
-            total += float.Parse(TotalPetrolPriceTB);
-            TotalSale = total.ToString();
+            
             foreach (var product in productCount)
             {
                 MessageBox.Show($"{SPetrolTitle} осталось {product.ToString()} литров", "Остаток бензина на заправке");
@@ -730,7 +753,6 @@ namespace Refill_Entity.ViewModels
                     TotalCafePriceTB = Sum.ToString("#####.##");
                 }
             }
-            MessageBox.Show($"{Title}");
         }
         #endregion
 
