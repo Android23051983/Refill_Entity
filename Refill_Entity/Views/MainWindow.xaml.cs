@@ -26,7 +26,7 @@ namespace Refill_Entity
     public partial class MainWindow : Window
     {
 
-        public MainWindowViewModel ViewModel { get; set; }
+        public static  MainWindowViewModel ViewModel { get; set; }
      
         public MainWindow()
         {
@@ -41,37 +41,15 @@ namespace Refill_Entity
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // создание, подключение и вывод нового окна авторизации после загрузки MainWindow
-            PasswordWindow passwordWindow = new()
-            {
-                Owner = this
-            };
-            passwordWindow.ShowDialog();
-            titleLabel.Content = this.Title;
+            ViewModel.OpenPasswordWindowMethod();
             //Загрузка данных из базы бензин в лист petrolTitle
             //Переброска из petrolTitle в petrolBox
             ViewModel.PetrolLoaded(ref petrolBox);
             //выведение сообщения в правый нижний угол главного окна о работающем кассире
-            PasswordWindow.Cashier(ref titleLabel);
             litersRB.IsChecked = true;
 
         }
 
-        private void CancelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (PasswordWindow.valueStatus == 1 || PasswordWindow.valueStatus == 2)
-            {
-                saleDataGrid.Items.Clear();
-            }
-            else if (PasswordWindow.valueStatus < 1)
-            {
-                PasswordWindow passwordWindow = new()
-                {
-                    Owner = this
-                };
-                passwordWindow.ShowDialog();
-                titleLabel.Content = this.Title;
-            }
-        }
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
         {

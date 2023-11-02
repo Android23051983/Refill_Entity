@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Refill_Entity
 {
-    public abstract class Notify : INotifyPropertyChanged 
+    public abstract class Notify : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -19,4 +19,6 @@ namespace Refill_Entity
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
+
+
 }

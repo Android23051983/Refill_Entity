@@ -32,6 +32,7 @@ namespace Refill_Entity.ViewModels
         private DispatcherTimer timer;
         private string currentTime;
         private int time;
+        public static string title;
         #region OBSERVABLE COLLECTION AND FEATURES
         public static Product? product;
         public static Refill? refill;       
@@ -40,9 +41,18 @@ namespace Refill_Entity.ViewModels
         private User? selectedUser;
         private Sale Sale;
 
+        public string Title
+        {
+            get => title;
+            set 
+            { 
+                title = value; 
+                OnPropertyChanged("Title");
+            }
+        }
         public User SelectedUser
         {
-            get => selectedUser!;
+            get => selectedUser;
             set
             {
                 selectedUser = value;
@@ -473,7 +483,7 @@ namespace Refill_Entity.ViewModels
             SetParametersWindow(newDaySaleReportWindow);
         }
 
-        private void OpenPasswordWindowMethod()
+        public void OpenPasswordWindowMethod()
         {
             PasswordWindow newPasswordWindow = new PasswordWindow();
             SetParametersWindow(newPasswordWindow);
@@ -720,6 +730,7 @@ namespace Refill_Entity.ViewModels
                     TotalCafePriceTB = Sum.ToString("#####.##");
                 }
             }
+            MessageBox.Show($"{Title}");
         }
         #endregion
 
